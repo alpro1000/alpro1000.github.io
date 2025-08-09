@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rozpočty staveb — Profesionální rozpočtář v ČR</title>
+<meta name="description" content="Profesionální zpracování stavebních rozpočtů v ČR: KROS, RTS/ÚRS, OTSKP, TOV, mosty, železnice, pozemní stavby. Rychlá nabídka do 24 h.">
+<meta name="theme-color" content="#e9efe7">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Rozpočty staveb — Profesionální rozpočtář v ČR">
+<meta property="og:description" content="Rozpočty, kontrola a optimalizace nákladů. KROS, RTS/ÚRS, OTSKP. Nabídka do 24 h.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+
+<!-- Favicon (inline SVG) -->
+<link rel="icon" href='data:image/svg+xml;utf8,
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="12" ry="12" fill="%23dfeee6"/>
+<path d="M14 44 L32 20 L50 44" stroke="%231c3b2b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="32" cy="34" r="3" fill="%231c3b2b"/>
+</svg>'>
+
+<style>
+  :root{
+    --bg:#f3f6f4;         /* ни темно и ни бело — мягкая «салвия» */
+    --card:#ffffff;
+    --ink:#1c2b23;        /* темно-зелёный графит */
+    --muted:#5f6f66;
+    --brand:#2a8b6f;      /* приглушённая бирюза */
+    --brand-2:#7cb39f;    /* дополнительный акцент */
+    --line:#e1e8e3;
+    --shadow: 0 10px 30px rgba(28,43,35,.08);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font:16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--bg), #eef4f0);
+  }
+  a{color:var(--brand);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .container{max-width:1080px;margin:0 auto;padding:0 20px}
+  header{
+    position:sticky;top:0;z-index:10;
+    backdrop-filter:saturate(120%) blur(8px);
+    background:color-mix(in srgb, var(--bg) 70%, white);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:12px;font-weight:700}
+  .logo svg{width:28px;height:28px}
+  .nav a.btn{padding:10px 16px;border-radius:999px;background:var(--brand);color:#fff;box-shadow:var(--shadow)}
+  .nav a.btn:hover{transform:translateY(-1px);transition:.2s ease}
+
+  .hero{padding:64px 0 32px}
+  .hero .wrap{
+    display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center;
+  }
+  .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#e9efe7;color:#2a5b48;font-weight:600;border:1px solid var(--line)}
+  h1{font-size:40px;line-height:1.15;margin:16px 0 10px;letter-spacing:.2px}
+  .lead{font-size:18px;color:var(--muted);max-width:64ch}
+  .hero .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)
+  }
+  .form{display:grid;gap:12px}
+  .field{display:grid;gap:6px}
+  label{font-size:13px;color:var(--muted)}
+  input,textarea,select{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fbfdfb;color:var(--ink);
+    outline:none;transition:border .2s ease, box-shadow .2s ease;
+  }
+  input:focus,textarea:focus,select:focus{border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(42,139,111,.14)}
+  textarea{min-height:120px;resize:vertical}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 16px;border-radius:12px;border:0;background:var(--brand);color:#fff;font-weight:700;cursor:pointer;
+    box-shadow:var(--shadow);transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn.secondary{background:#e9efe7;color:#1c2b2b}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+
+  section{padding:48px 0}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+  .card h3{margin:.2rem 0 .3rem}
+  .muted{color:var(--muted)}
+  .kpis{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+  .kpis .pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#fbfdfb;font-weight:600}
+
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+  .step .n{width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:inline-grid;place-items:center;font-weight:800;margin-bottom:8px}
+
+  .strip{background:linear-gradient(90deg,#ecf5f0, #e6f1ed);border:1px solid var(--line);padding:16px;border-radius:12px}
+  .logos{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .logos img{height:28px;opacity:.7;filter:grayscale(1)}
+
+  footer{padding:28px 0 48px;border-top:1px solid var(--line);color:var(--muted)}
+  .footgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:18px}
+
+  /* Умеренная анимация появления */
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .5s ease, transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (max-width:900px){
+    .hero .wrap{grid-template-columns:1fr}
+    .grid-3{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .footgrid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="logo">
+      <!-- ЛОГОТИП SVG (замените текст внутри <text> на своё имя/бренд) -->
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop offset="0%" stop-color="#2a8b6f"/><stop offset="100%" stop-color="#7cb39f"/>
+          </linearGradient>
+        </defs>
+        <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#g)"/>
+        <path d="M16 40 L32 22 L48 40" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="32" cy="32" r="3" fill="#fff"/>
+      </svg>
+      <span>Rozpočty staveb</span>
+    </div>
+    <nav style="display:flex;gap:14px;align-items:center">
+      <a href="#sluzby">Služby</a>
+      <a href="#proc-ja">Proč já</a>
+      <a href="#kontakt" class="btn">Získat nabídku</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container wrap">
+      <div class="reveal">
+        <span class="badge">Rozpočtář pro ČR · KROS · RTS/ÚRS · OTSKP</span>
+        <h1>Rozpočty, kontrola a optimalizace&nbsp;nákladů — mosty, železnice, pozemní stavby</h1>
+        <p class="lead">
+          Připravuji precizní rozpočty a oceňování TOV včetně dělení na práci, materiál a mechanizaci.
+          Pracuji s <strong>KROS 4</strong> a <strong>RTS/ÚRS</strong>. Opravy a benchmarky podle databází firmy, reálných sazeb a strojů (např. <em>dvoucestný bagr</em>).
+        </p>
+        <div class="kpis">
+          <div class="pill">Nabídka do 24 h</div>
+          <div class="pill">Audit rozpočtu od 4 990 Kč</div>
+          <div class="pill">Termíny dle soutěží</div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px">
+          <a href="#kontakt" class="btn">Poptejte kalkulaci</a>
+          <a href="#sluzby" class="btn secondary">Zobrazit služby</a>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <form class="form" id="lead" action="https://formspree.io/f/your-form-id" method="POST">
+          <h3 style="margin:0">Rychlá poptávka</h3>
+          <div class="field">
+            <label for="name">Jméno / firma</label>
+            <input id="name" name="name" required placeholder="Vaše jméno nebo název firmy">
+          </div>
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" name="email" required placeholder="vas@email.cz">
+          </div>
+          <div class="field">
+            <label for="type">Typ zakázky</label>
+            <select id="type" name="type">
+              <option>Most / inženýrská stavba</option>
+              <option>Železniční stavba</option>
+              <option>Pozemní stavba</option>
+              <option>Jiné / kombinace</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="msg">Stručný popis (rozsah, termín, podklady)</label>
+            <textarea id="msg" name="message" placeholder="OTSKP, podklady PD, požadovaný termín, specifika (např. dvoucestný bagr)…"></textarea>
+          </div>
+          <input type="hidden" name="_subject" value="Nová poptávka — Rozpočty staveb">
+          <button class="btn" type="submit">Odeslat poptávku</button>
+          <small class="muted">Odesláním souhlasíte se zpracováním údajů pouze pro účely nabídky.</small>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="sluzby">
+    <div class="container">
+      <h2 class="reveal">Služby</h2>
+      <div class="grid-3">
+        <div class="card reveal">
+          <h3>Rozpočty & nabídky</h3>
+          <p class="muted">Kompletní rozpočet v KROS/RTS s členěním TOV, kalkulace mezd a strojů, převod do OTSKP.</p>
+          <ul>
+            <li>Výkaz výměr / kontrola VV</li>
+            <li>Variantní scénáře (A/B)</li>
+            <li>Export: XLSX, PDF, KROS</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <h3>Audit & optimalizace</h3>
+          <p class="muted">Nezávislá kontrola rozpočtu, benchmark proti vlastní databázi a trhu, identifikace rizik a chyb.</p>
+          <ul>
+            <li>Reálné hodinové sazby</li>
+            <li>Stroje (dvoucestný bagr atd.)</li>
+            <li>Doporučení úspor</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <h3>Konzultace & podpora</h3>
+          <p class="muted">Pomoc při soutěžích, přípravě dotazů, vysvětlení položek a ladění podmínek smlouvy (splatnost, zádržné).</p>
+          <ul>
+            <li>Q&A k rozpočtu</li>
+            <li>Příprava podkladů</li>
+            <li>Report pro management</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="strip reveal" style="margin-top:18px">
+        <strong>Specializace:</strong> mosty, železniční těleso, PHS, drenáže, gabiony, pozemní stavby (interiéry, MEP koordinace).
+      </div>
+    </div>
+  </section>
+
+  <section id="proc-ja">
+    <div class="container">
+      <h2 class="reveal">Proč spolupracovat se mnou</h2>
+      <div class="steps">
+        <div class="step reveal"><div class="n">1</div><strong>Přesnost</strong><br><span class="muted">Každá položka rozebrána na práci, materiál a mechanizaci dle PD a reálné praxe.</span></div>
+        <div class="step reveal"><div class="n">2</div><strong>Rychlost</strong><br><span class="muted">První nabídka obvykle do 24 hodin. Expres dle dohody.</span></div>
+        <div class="step reveal"><div class="n">3</div><strong>Transparentnost</strong><br><span class="muted">Srozumitelný rozpad TOV, jasné předpoklady a rizika.</span></div>
+        <div class="step reveal"><div class="n">4</div><strong>Software & formáty</strong><br><span class="muted">KROS 4, RTS/ÚRS, OTSKP, XLSX/PDF. Export pro interní systémy.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="card reveal">
+        <h3>Krátké představení</h3>
+        <p class="muted">
+          Rozpočtář s praxí v inženýrském i pozemním stavitelství. Zkušenosti s mosty a železnicí, včetně přepočtů
+          položek bez úplného TOV. Opírám se o data z minulých zakázek, aktuální ceny a strojní kapacity. Cílem je
+          spolehlivá nabídka, kterou lze obhájit v soutěži i při realizaci.
+        </p>
+        <div class="logos" aria-label="Používaný software">
+          <img alt="KROS 4" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='120' height='28'><text x='0' y='20' font-family='Arial' font-size='18' fill='%235f6f66'>KROS 4</text></svg>">
+          <img alt="RTS/ÚRS" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='120' height='28'><text x='0' y='20' font-family='Arial' font-size='18' fill='%235f6f66'>RTS / ÚRS</text></svg>">
+          <img alt="OTSKP" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='120' height='28'><text x='0' y='20' font-family='Arial' font-size='18' fill='%235f6f66'>OTSKP</text></svg>">
+          <img alt="XLSX/PDF" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='120' height='28'><text x='0' y='20' font-family='Arial' font-size='18' fill='%235f6f66'>XLSX / PDF</text></svg>">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="container">
+      <h2 class="reveal">Kontakt</h2>
+      <div class="grid-3">
+        <div class="card reveal">
+          <h3>Rychlý e-mail</h3>
+          <p class="muted">Pošlete stručný popis a termín. Odpovím s návrhem postupu a cenou.</p>
+          <p><strong>E-mail:</strong> <a href="mailto:info@vase-firma.cz">info@vase-firma.cz</a><br>
+             <strong>Telefon:</strong> <a href="tel:+420000000000">+420 000 000 000</a></p>
+          <p><strong>Sídlo:</strong> Plzeň / celá ČR</p>
+        </div>
+        <div class="card reveal">
+          <h3>Co potřebuji k nabídce</h3>
+          <ul class="muted">
+            <li>Projektová dokumentace / VV</li>
+            <li>Termín soutěže / realizace</li>
+            <li>Požadovaný formát (KROS/RTS/XLSX)</li>
+            <li>Specifika (stroje, materiály, normy)</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <h3>GDPR & fakturace</h3>
+          <p class="muted">Údaje používám výhradně pro zpracování nabídky a plnění smlouvy. Fakturace s DPH možná.</p>
+        </div>
+      </div>
+      <div class="strip reveal" style="margin-top:18px">
+        <strong>Tip:</strong> Potřebujete jen rychlou kontrolu rozpočtu? Napište „<em>Audit</em>“ a přiložte PDF — ozvu se s fixní cenou.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footgrid">
+    <div>
+      <div class="logo" style="margin-bottom:6px">
+        <svg viewBox="0 0 64 64" width="22" height="22" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="14" fill="#2a8b6f"/><path d="M16 40 L32 22 L48 40" stroke="#fff" stroke-width="4" fill="none"/></svg>
+        <span>Rozpočty staveb</span>
+      </div>
+      <div class="muted">© <span id="y"></span> Rozpočty staveb. Všechna práva vyhrazena.</div>
+    </div>
+    <div>
+      <strong>Odkazy</strong><br>
+      <a href="#sluzby">Služby</a><br>
+      <a href="#proc-ja">Proč já</a><br>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    <div>
+      <strong>Dokumenty</strong><br>
+      <a href="#" onclick="alert('Přidejte odkaz na PDF CV');return false;">CV (PDF)</a><br>
+      <a href="#" onclick="alert('Přidejte odkaz na VOP');return false;">Obchodní podmínky</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Год в футере
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Мягкое появление блоков при прокрутке
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Фоллбэк, если Formspree не настроен: отправка через mailto
+  document.getElementById('lead').addEventListener('submit', function(e){
+    if(this.action.includes('your-form-id')){
+      e.preventDefault();
+      const name = encodeURIComponent(this.name.value||'');
+      const email = encodeURIComponent(this.email.value||'');
+      const type = encodeURIComponent(this.type.value||'');
+      const msg  = encodeURIComponent(this.message.value||'');
+      const body = `Jméno/Firma: ${name}%0AEmail: ${email}%0ATyp zakázky: ${type}%0APopis:%0A${msg}`;
+      window.location.href = `mailto:info@vase-firma.cz?subject=Nová poptávka — Rozpočty staveb&body=${body}`;
+    }
+  });
+</script>
+
+<!-- Strukturovaná data (LocalBusiness/ProfessionalService) -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"ProfessionalService",
+  "name":"Rozpočty staveb",
+  "description":"Rozpočty, audit a optimalizace nákladů (KROS, RTS/ÚRS, OTSKP) pro mosty, železnice a pozemní stavby v ČR.",
+  "areaServed":"CZ",
+  "email":"info@vase-firma.cz",
+  "telephone":"+420000000000",
+  "url":"https://example.cz",
+  "address":{"@type":"PostalAddress","addressLocality":"Plzeň","addressCountry":"CZ"},
+  "sameAs":[]
+}
+</script>
+</body>
+</html>
