@@ -4,10 +4,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>StavBot — Rozklad T‑O‑V, OTSKP/ÚRS, bednění a harmonogram</title>
-<meta name="description" content="StavBot: rozpočtář v ČR — rozklad T‑O‑V z výkazu výměr, kontrola rozpočtů OTSKP/ÚRS, výpočet bednění a náčrt harmonogramu. Nahrát podklady, TOV bot, exporty.">
-<meta property="og:title" content="StavBot — rozpočtář a T‑O‑V bot">
-<meta property="og:description" content="Rozklad T‑O‑V, OTSKP/ÚRS, bednění (PERI/Doka/běžné), harmonogram Gantt, exporty.">
+<title>StavBot · Rozklad TOV OTSKP ÚRS bednění a harmonogram</title>
+<meta name="description" content="StavBot: rozpočtář v ČR · rozklad TOV z výkazu výměr, kontrola rozpočtů OTSKP a ÚRS, výpočet bednění a náčrt harmonogramu. Nahrát podklady, TOV bot, exporty.">
+<meta property="og:title" content="StavBot · rozpočtář a TOV bot">
+<meta property="og:description" content="Rozklad TOV, OTSKP a ÚRS, bednění PERI Doka i běžné, harmonogram Gantt, exporty.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="cs_CZ">
 <meta name="twitter:card" content="summary">
@@ -21,12 +21,13 @@ header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(8px);background:
 .wrap{max-width:1100px;margin:auto;padding:16px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
 .brand-badge{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0b0f0b;font-weight:900}
-nav{display:flex;justify-content:space-between;align-items:center}
-.cta{display:flex;gap:10px}
-.btn{appearance:none;border:0;border-radius:14px;background:var(--brand);color:#0b0f0b;font-weight:700;padding:12px 16px;box-shadow:0 6px 16px rgba(107,142,35,.25);cursor:pointer;transition:.2s transform,.2s background}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:16px;background:var(--brand);color:#0b0f0b;font-weight:800;padding:14px 18px;box-shadow:0 6px 16px rgba(107,142,35,.25);cursor:pointer;transition:.2s transform,.2s background}
 .btn:hover{background:var(--brand-2);transform:translateY(-1px)}
 .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn.block{width:100%}
+.btn.tov-big{font-size:1.05rem;padding:16px 22px;border-radius:18px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .grid{display:grid;gap:16px}
 .hero{padding:28px 16px 12px}
@@ -41,10 +42,10 @@ nav{display:flex;justify-content:space-between;align-items:center}
 .table th,.table td{border-bottom:1px solid var(--line);padding:10px;text-align:left}
 .small{font-size:.9rem;color:var(--muted)}
 footer{padding:30px 16px;color:var(--muted);border-top:1px solid var(--line)}
-.fab{position:fixed;right:16px;bottom:16px;background:var(--brand);color:#0b0f0b;border:0;border-radius:999px;padding:14px 18px;font-weight:800;box-shadow:0 10px 26px rgba(107,142,35,.35);cursor:pointer;z-index:50}
+.fab{position:fixed;right:16px;bottom:16px;background:var(--brand);color:#0b0f0b;border:0;border-radius:999px;padding:18px 22px;font-weight:900;font-size:1.05rem;box-shadow:0 14px 32px rgba(107,142,35,.4);cursor:pointer;z-index:50}
 .fab:active{transform:translateY(1px)}
 .pulse{position:relative}
-.pulse::after{content:"";position:absolute;inset:-8px;border-radius:999px;border:2px solid var(--brand-2);opacity:.5;animation:pulse 1.8s infinite}
+.pulse::after{content:"";position:absolute;inset:-10px;border-radius:999px;border:2px solid var(--brand-2);opacity:.5;animation:pulse 1.8s infinite}
 @keyframes pulse{0%{transform:scale(.95);opacity:.75}70%{transform:scale(1.15);opacity:.2}100%{transform:scale(1.3);opacity:0}}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;padding:0;z-index:60}
 .modal.open{display:flex}
@@ -72,26 +73,10 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
 .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px)}
 </style>
 <script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"Organization",
-  "name":"StavBot",
-  "url":"https://example.com",
-  "email":"alpro1000@gmail.com",
-  "address":{"@type":"PostalAddress","addressCountry":"CZ"},
-  "sameAs":[]
-}
+{"@context":"https://schema.org","@type":"Organization","name":"StavBot","url":"https://example.com","email":"alpro1000@gmail.com","address":{"@type":"PostalAddress","addressCountry":"CZ"},"sameAs":[]}
 </script>
 <script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"Service",
-  "name":"Rozpočtářské služby a T‑O‑V bot",
-  "provider":{"@type":"Organization","name":"StavBot"},
-  "serviceType":"Rozklad T‑O‑V, kontrola rozpočtů OTSKP/ÚRS, výpočet bednění, harmonogram",
-  "areaServed":{"@type":"Country","name":"Česko"},
-  "availableChannel":{"@type":"ServiceChannel","servicePhone":"000 000 000"}
-}
+{"@context":"https://schema.org","@type":"Service","name":"Rozpočtářské služby a TOV bot","provider":{"@type":"Organization","name":"StavBot"},"serviceType":"Rozklad TOV kontrola rozpočtů OTSKP a ÚRS výpočet bednění harmonogram","areaServed":{"@type":"Country","name":"Česko"},"availableChannel":{"@type":"ServiceChannel","servicePhone":"000 000 000"}}
 </script>
 </head>
 <body>
@@ -103,6 +88,7 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
         <span>StavBot</span>
       </div>
       <div class="cta" aria-label="Akce">
+        <button class="btn tov-big" id="cta-bot-top" aria-controls="bot-modal" aria-expanded="false">TOV bot</button>
         <button class="btn" id="cta-calc" aria-controls="harmo-modal" aria-expanded="false">Zahájit kalkulaci</button>
         <button class="btn secondary" id="cta-intake" aria-controls="intake-modal" aria-expanded="false">Nahrát podklady</button>
       </div>
@@ -113,9 +99,9 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
 <main>
   <section class="hero wrap">
     <div class="card">
-      <h1>Rozpočtář pro ČR + T‑O‑V bot</h1>
-      <p><strong>Rozklad T‑O‑V z výkazu výměr, kontrola rozpočtů OTSKP/ÚRS, výpočet bednění a náčrt harmonogramu — rychle a přehledně.</strong> Pro jakoukoliv stavbu – mosty, železnice, pozemní stavby.</p>
-      <p class="small">OTSKP je ceník Ministerstva dopravy a T‑O‑V si skládáme sami (OTSKP slouží pouze jako orientační cenová hladina).</p>
+      <h1>Rozpočtář pro ČR a TOV bot</h1>
+      <p><strong>Rozklad TOV z výkazu výměr, kontrola rozpočtů OTSKP a ÚRS, výpočet bednění a náčrt harmonogramu rychle a přehledně.</strong> Pro jakoukoliv stavbu · mosty · železnice · pozemní stavby.</p>
+      <p class="small">OTSKP je ceník Ministerstva dopravy a TOV si skládáme sami. OTSKP slouží pouze jako orientační cenová hladina.</p>
     </div>
   </section>
 
@@ -124,28 +110,28 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
       <div class="card">
         <h2>Služby</h2>
         <div class="list">
-          <div class="item">Rozklad T‑O‑V (práce/stroje/materiál) z výkazu výměr</div>
-          <div class="item">Bednění: PERI / Doka / běžné — výměry a orientační náklady</div>
-          <div class="item">Kontrola rozpočtů: OTSKP / ÚRS (KROS)</div>
-          <div class="item">Harmonogram (Gantt) z norem a produktivit</div>
-          <div class="item">Export: XLSX / CSV / JSON</div>
+          <div class="item">Rozklad TOV práce stroje materiál z výkazu výměr</div>
+          <div class="item">Bednění PERI Doka i běžné · výměry a orientační náklady</div>
+          <div class="item">Kontrola rozpočtů OTSKP a ÚRS KROS</div>
+          <div class="item">Harmonogram Gantt z norem a produktivit</div>
+          <div class="item">Export XLSX CSV JSON</div>
         </div>
       </div>
       <div class="card">
         <h2>Jak to funguje</h2>
         <ol class="list">
-          <li class="item">Nahrajete PDF/DOCX/XLSX/CSV/DWG/PNG/JPG/ZIP nebo vložíte URL.</li>
+          <li class="item">Nahrajete PDF DOCX XLSX CSV DWG PNG JPG ZIP nebo vložíte URL.</li>
           <li class="item">Backend sjednotí podklady do <span class="badge">project.json</span>.</li>
-          <li class="item">T‑O‑V bot navrhne T/O/V pro položky, doplníte poznámky.</li>
-          <li class="item">Spočítáme bednění a náčrt harmonogramu (Gantt).</li>
-          <li class="item">Odešleme exporty (XLSX/CSV/JSON) a sumarizaci.</li>
+          <li class="item">TOV bot navrhne T O V pro položky doplníte poznámky.</li>
+          <li class="item">Spočítáme bednění a náčrt harmonogramu Gantt.</li>
+          <li class="item">Dostanete exporty XLSX CSV JSON a sumarizaci.</li>
         </ol>
       </div>
       <div class="card">
-        <h2>T‑O‑V bot</h2>
-        <p>Navrhne T/O/V pro libovolnou položku (OTSKP či vlastní název), přidá odůvodnění a orientační cenu. Umí i rychlý výpočet bednění a základní harmonogram.</p>
+        <h2>TOV bot</h2>
+        <p>Navrhne T O V pro libovolnou položku OTSKP nebo vlastní název. Přidá odůvodnění a orientační cenu. Umí rychlý výpočet bednění a základní harmonogram.</p>
         <div class="kv">
-          <span class="tag">Profil norem, množství, MJ, poznámka → výstup T/O/V</span>
+          <span class="tag">Profil norem množství MJ poznámka → výstup T O V</span>
           <span class="badge">LLM přes n8n</span>
         </div>
       </div>
@@ -157,34 +143,28 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
       <div class="card">
         <h2>Ceník</h2>
         <div class="pricing">
-          <div class="plan">
-            <strong>Free</strong><br><span class="small">1–2 položky, bez bednění</span>
-          </div>
-          <div class="plan">
-            <strong>PRO</strong><br><span class="small">Plný T‑O‑V + bednění + exporty</span>
-          </div>
-          <div class="plan">
-            <strong>Expert</strong><br><span class="small">Firemní normy a historie projektů</span>
-          </div>
+          <div class="plan"><strong>Free</strong><br><span class="small">1 až 2 položky bez bednění</span></div>
+          <div class="plan"><strong>PRO</strong><br><span class="small">Plný TOV a bednění a exporty</span></div>
+          <div class="plan"><strong>Expert</strong><br><span class="small">Firemní normy a historie projektů</span></div>
         </div>
       </div>
       <div class="card">
         <h2>FAQ</h2>
         <details>
-          <summary>Jak pracujete s OTSKP a ÚRS?</summary>
-          <p>OTSKP používám jako cenovou hladinu MD. T‑O‑V skládám individuálně dle projektu a praxe. ÚRS (KROS) pro normy a kontrolu.</p>
+          <summary>Jak pracujete s OTSKP a ÚRS</summary>
+          <p>OTSKP používám jako cenovou hladinu MD. TOV skládám individuálně dle projektu a praxe. ÚRS KROS pro normy a kontrolu.</p>
         </details>
         <details>
-          <summary>Jaké formáty mohu nahrát?</summary>
-          <p>PDF, DOC(X), XLSX, CSV, DWG, PNG/JPG/TIF, ZIP i URL.</p>
+          <summary>Jaké formáty mohu nahrát</summary>
+          <p>PDF DOCX XLSX CSV DWG PNG JPG TIF ZIP i URL.</p>
         </details>
         <details>
-          <summary>Jak vzniká harmonogram?</summary>
-          <p>Z norem (ÚRS) a z vašich/našich realizovaných produktivit. Délky se přepočítají na dny.</p>
+          <summary>Jak vzniká harmonogram</summary>
+          <p>Z norem ÚRS a z vašich nebo našich realizovaných produktivit. Délky se přepočítají na dny.</p>
         </details>
         <details>
-          <summary>Mohu použít firemní normy?</summary>
-          <p>Ano. V <em>Admin → Data &amp; Učení</em> nahrajete normy/předpisy i minulé rozpočty.</p>
+          <summary>Mohu použít firemní normy</summary>
+          <p>Ano. V Admin · Data a Učení nahrajete normy a předpisy i minulé rozpočty.</p>
         </details>
       </div>
     </div>
@@ -192,36 +172,36 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
 
   <section class="wrap section">
     <div class="card">
-      <h2>Data &amp; Učení</h2>
+      <h2>Data a Učení</h2>
       <div class="grid cols-2">
         <div>
           <h3 class="tag">Kdy</h3>
           <ul>
-            <li>Nové verze TKP/ČSN/Směrnic SŽ — ihned.</li>
-            <li>Před většími výběrovými řízeními.</li>
-            <li>Po dokončení projektu (produktivity a T‑O‑V).</li>
-            <li>Měsíčně re‑indexovat pravidla a sazby.</li>
+            <li>Nové verze TKP ČSN Směrnic SŽ ihned</li>
+            <li>Před většími výběrovými řízeními</li>
+            <li>Po dokončení projektu produktivity a TOV</li>
+            <li>Měsíčně reindexovat pravidla a sazby</li>
           </ul>
         </div>
         <div>
           <h3 class="tag">Kam</h3>
           <ol>
-            <li>Normy/předpisy → <strong>Admin → Data &amp; Učení</strong> → odeslat na <span class="badge">N8N_RULES_URL</span> (převede na <em>JSON pravidla</em>).</li>
-            <li>Realizované rozpočty → <span class="badge">N8N_PROJECTS_URL</span> (uloží T‑O‑V + produktivity).</li>
-            <li>Máte vlastní JSON? Použijte <em>Admin → Import (JSON)</em> do LocalStorage.</li>
+            <li>Normy a předpisy → <strong>Admin · Data a Učení</strong> → odeslat na <span class="badge">N8N_RULES_URL</span> vznikne JSON pravidla.</li>
+            <li>Realizované rozpočty → <span class="badge">N8N_PROJECTS_URL</span> uloží TOV a produktivity.</li>
+            <li>Máte vlastní JSON → použijte <em>Admin · Import JSON</em> do LocalStorage.</li>
           </ol>
         </div>
       </div>
-      <p class="small">Backend sjednotí cokoliv do <strong>project.json</strong> se strukturou: projekt, vstup, výkaz_výmer, omezení, poznámky.</p>
+      <p class="small">Backend sjednotí cokoliv do <strong>project.json</strong> se strukturou projekt vstup výkaz_výmer omezení poznámky.</p>
     </div>
   </section>
 
   <section class="wrap section">
     <div class="card">
       <h2>Kontakt</h2>
-      <p>E‑mail: <a href="mailto:alpro1000@gmail.com">alpro1000@gmail.com</a> · Telefon: 000 000 000</p>
+      <p>E mail: <a href="mailto:alpro1000@gmail.com">alpro1000@gmail.com</a> · Telefon: 000 000 000</p>
       <form action="https://formspree.io/f/mayvlpov" method="POST" class="grid">
-        <label>Váš e‑mail<input class="input" type="email" name="email" required aria-label="Váš email"></label>
+        <label>Váš e mail<input class="input" type="email" name="email" required aria-label="Váš email"></label>
         <label>Zpráva<textarea class="input" name="message" rows="4" required aria-label="Zpráva"></textarea></label>
         <button class="btn" type="submit">Odeslat</button>
       </form>
@@ -231,26 +211,26 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
 
 <footer class="wrap">
   <div class="kv">
-    <span>© <span id="y"></span> StavBot — rozpočtář v ČR</span>
+    <span>© <span id="y"></span> StavBot · rozpočtář v ČR</span>
     <a href="#" id="open-admin" aria-controls="admin-modal" aria-expanded="false">Admin</a>
   </div>
 </footer>
 
-<button class="fab pulse" id="fab-chat" aria-label="tov bot" aria-controls="bot-modal" aria-expanded="false">tov bot</button>
+<button class="fab pulse" id="fab-chat" aria-label="tov bot" aria-controls="bot-modal" aria-expanded="false">TOV bot</button>
 
 <div class="modal" id="bot-modal" role="dialog" aria-modal="true" aria-labelledby="bot-title">
   <dialog>
-    <header><strong id="bot-title">T‑O‑V bot</strong></header>
+    <header><strong id="bot-title">TOV bot</strong></header>
     <div class="content grid">
       <div class="row two">
         <label>Profil norem
           <select id="profile" class="input" aria-label="Profil norem">
-            <option value="REFERENCE">REFERENCE (ÚRS)</option>
-            <option value="FIRM">FIRM (firemní)</option>
+            <option value="REFERENCE">REFERENCE ÚRS</option>
+            <option value="FIRM">FIRM firemní</option>
           </select>
         </label>
-        <label>OTSKP / název položky
-          <input id="item" class="input" placeholder="např. 12273A / Betonáž opěry">
+        <label>OTSKP nebo název položky
+          <input id="item" class="input" placeholder="např. 12273A Betonáž opěry">
         </label>
       </div>
       <div class="row three">
@@ -258,13 +238,13 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
           <input id="qty" class="input" type="number" step="0.0001" min="0" value="1">
         </label>
         <label>MJ
-          <input id="uom" class="input" placeholder="m, m2, m3, ks" value="m3">
+          <input id="uom" class="input" placeholder="m m2 m3 ks" value="m3">
         </label>
         <label>Poznámka
-          <input id="note" class="input" placeholder="specifikace, omezení, apod.">
+          <input id="note" class="input" placeholder="specifikace omezení apod.">
         </label>
       </div>
-      <button class="btn" id="tov-run">Navrhnout T‑O‑V</button>
+      <button class="btn tov-big" id="tov-run">Navrhnout TOV</button>
       <div class="card" aria-live="polite">
         <table class="table" id="tov-table">
           <thead><tr><th>Typ</th><th>Popis</th><th>Množství</th><th>MJ</th><th>Jedn. cena</th><th>Celkem</th></tr></thead>
@@ -274,7 +254,7 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
       </div>
 
 ```
-  <h3 class="tag">Mini‑kalkulátor bednění</h3>
+  <h3 class="tag">Mini kalkulátor bednění</h3>
   <form id="form-calc" class="grid">
     <div class="row two">
       <label>Typ prvku
@@ -293,19 +273,19 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
       </label>
     </div>
     <div class="row three">
-      <label>H / tloušťka [m]<input id="h" class="input" type="number" step="0.001" min="0" value="3"></label>
+      <label>H nebo tloušťka [m]<input id="h" class="input" type="number" step="0.001" min="0" value="3"></label>
       <label>Šířka [m]<input id="w" class="input" type="number" step="0.001" min="0" value="0.3"></label>
       <label>Délka [m]<input id="l" class="input" type="number" step="0.001" min="0" value="10"></label>
     </div>
     <div class="row two">
       <label>Otvory [m²]<input id="holes" class="input" type="number" step="0.01" min="0" value="0"></label>
-      <label>Jedn. sazba [Kč/m²]<input id="rate" class="input" type="number" step="1" min="0" value="650"></label>
+      <label>Jedn. sazba Kč m²<input id="rate" class="input" type="number" step="1" min="0" value="650"></label>
     </div>
     <button class="btn" type="submit">Spočítat</button>
   </form>
   <div class="kv">
     <div id="calc-out" class="small">m²: 0 · Náklady: 0 Kč</div>
-    <span class="tag">Výchozí sazby lze změnit v Admin → Data &amp; Učení</span>
+    <span class="tag">Výchozí sazby lze změnit v Admin · Data a Učení</span>
   </div>
 </div>
 ```
@@ -315,11 +295,11 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
 
 <div class="modal" id="harmo-modal" role="dialog" aria-modal="true" aria-labelledby="harmo-title">
   <dialog>
-    <header><strong id="harmo-title">Harmonogram (Gantt)</strong></header>
+    <header><strong id="harmo-title">Harmonogram Gantt</strong></header>
     <div class="content grid">
       <div class="card">
         <table class="table" id="harmo-table" aria-label="Úkoly harmonogramu">
-          <thead><tr><th>Název</th><th>MJ</th><th>Qty</th><th>Produktivita/den</th></tr></thead>
+          <thead><tr><th>Název</th><th>MJ</th><th>Qty</th><th>Produktivita za den</th></tr></thead>
           <tbody>
             <tr><td contenteditable="true">Výkop</td><td contenteditable="true">m3</td><td contenteditable="true">100</td><td contenteditable="true">20</td></tr>
             <tr><td contenteditable="true">Bednění</td><td contenteditable="true">m2</td><td contenteditable="true">200</td><td contenteditable="true">50</td></tr>
@@ -332,9 +312,43 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
         <button class="btn secondary" id="harmo-export">Export CSV</button>
       </div>
       <canvas id="gantt" height="220" aria-label="Gantt"></canvas>
-      <div class="small">Dny se počítají jako <kbd>ceil(qty / produktivita)</kbd> a řadí se sekvenčně.</div>
+      <div class="small">Dny se počítají jako <kbd>ceil qty děleno produktivita</kbd> a řadí se sekvenčně.</div>
     </div>
   </dialog>
+</div>
+  <h3 class="tag">Mini kalkulátor bednění</h3>
+  <form id="form-calc" class="grid">
+    <div class="row two">
+      <label>Typ prvku
+        <select id="el-type" class="input">
+          <option value="wall">Stěna</option>
+          <option value="slab">Deska</option>
+          <option value="column">Sloup</option>
+          <option value="beam">Průvlak</option>
+        </select>
+      </label>
+      <label>Systém
+        <select id="form-type" class="input">
+          <option value="system">Systémové</option>
+          <option value="plain">Běžné</option>
+        </select>
+      </label>
+    </div>
+    <div class="row three">
+      <label>H nebo tloušťka [m]<input id="h" class="input" type="number" step="0.001" min="0" value="3"></label>
+      <label>Šířka [m]<input id="w" class="input" type="number" step="0.001" min="0" value="0.3"></label>
+      <label>Délka [m]<input id="l" class="input" type="number" step="0.001" min="0" value="10"></label>
+    </div>
+    <div class="row two">
+      <label>Otvory [m²]<input id="holes" class="input" type="number" step="0.01" min="0" value="0"></label>
+      <label>Jedn. sazba Kč m²<input id="rate" class="input" type="number" step="1" min="0" value="650"></label>
+    </div>
+    <button class="btn" type="submit">Spočítat</button>
+  </form>
+  <div class="kv">
+    <div id="calc-out" class="small">m²: 0 · Náklady: 0 Kč</div>
+    <span class="tag">Výchozí sazby lze změnit v Admin · Data a Učení</span>
+  </div>
 </div>
 
 <div class="modal" id="intake-modal" role="dialog" aria-modal="true" aria-labelledby="intake-title">
@@ -352,28 +366,28 @@ canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;displa
       <button class="btn" id="send-intake">Odeslat k analýze</button>
       <div class="progress" aria-hidden="true"><i id="bar"></i></div>
       <div id="intake-status" class="small" aria-live="polite"></div>
-      <p class="small">Normalizace JSON (<strong>project.json</strong>) obsahuje: <em>projekt, vstup, výkaz_výmer, omezení, poznámky</em>.</p>
+      <p class="small">Normalizace JSON project.json obsahuje · projekt · vstup · výkaz_výmer · omezení · poznámky.</p>
     </div>
   </dialog>
 </div>
 
 <div class="modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
   <dialog>
-    <header><strong id="admin-title">Admin — Data &amp; Učení</strong></header>
+    <header><strong id="admin-title">Admin · Data a Učení</strong></header>
     <div class="content grid">
       <div class="card">
         <h3>Instrukce</h3>
         <ul>
-          <li>Normy/předpisy nahrajte jako PDF/DOCX/XLSX/CSV/DWG/ZIP nebo URL → odeslat na <span class="badge">N8N_RULES_URL</span> (vznikne <em>tkp_rules.json</em>).</li>
-          <li>Realizované rozpočty (XLSX/CSV/ZIP) → <span class="badge">N8N_PROJECTS_URL</span> (uloží T‑O‑V + produktivity).</li>
-          <li>Souborové názvy: <em>CZ_TKP18_2022.pdf</em>, <em>CSN_EN_206_2023.pdf</em>, <em>SZ_Smernice_S13_2024.pdf</em>, <em>Projekt_ABC_2024_vykaz.xlsx</em>.</li>
-          <li>Metadata JSON: <code>standard_id, publisher, jurisdiction, language, edition_date, clause, text_cs, severity, check, applicability</code>.</li>
-          <li>LLM netrénujeme on‑line; děláme grounding (pravidla + vyhledávání + vaše data).</li>
+          <li>Normy a předpisy nahrajte jako PDF DOCX XLSX CSV DWG ZIP nebo URL → odeslat na <span class="badge">N8N_RULES_URL</span> vznikne tkp_rules.json.</li>
+          <li>Realizované rozpočty XLSX CSV ZIP → <span class="badge">N8N_PROJECTS_URL</span> uloží TOV a produktivity.</li>
+          <li>Souborové názvy · CZ_TKP18_2022.pdf · CSN_EN_206_2023.pdf · SZ_Smernice_S13_2024.pdf · Projekt_ABC_2024_vykaz.xlsx</li>
+          <li>Metadata JSON · standard_id publisher jurisdiction language edition_date clause text_cs severity check applicability</li>
+          <li>LLM netrénujeme online · děláme grounding pravidla a vyhledávání a vaše data.</li>
         </ul>
       </div>
       <div class="row two">
-        <label>Import (JSON) do LocalStorage
-          <textarea id="admin-json" class="input" rows="6" placeholder='{"rules":[],"rates":{"system":750,"plain":550}}'></textarea>
+        <label>Import JSON do LocalStorage
+          <textarea id="admin-json" class="input" rows="6" placeholder='{"rules":[],"rates":{"default_rate":650}}'></textarea>
         </label>
         <div class="grid">
           <button class="btn" id="admin-save">Uložit JSON</button>
@@ -411,6 +425,7 @@ function closeModal(el){
   modal.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(e.target); });
 });
 document.getElementById('fab-chat').addEventListener('click',()=>openModal('bot-modal'));
+document.getElementById('cta-bot-top').addEventListener('click',()=>openModal('bot-modal'));
 document.getElementById('cta-calc').addEventListener('click',()=>openModal('harmo-modal'));
 document.getElementById('cta-intake').addEventListener('click',()=>openModal('intake-modal'));
 document.getElementById('open-admin').addEventListener('click',(e)=>{e.preventDefault();openModal('admin-modal');});
@@ -433,14 +448,14 @@ document.getElementById('send-intake').addEventListener('click',async ()=>{
   fd.append('project_name',name||'Nepojmenovaný projekt');
   if(url) fd.append('source_url',url);
   for(const f of filesInput.files) fd.append('files',f,f.name);
-  status.textContent='Odesílám…';
+  status.textContent='Odesílám';
   bar.style.width='20%';
   try{
     const res=await fetch(N8N_INTAKE_URL,{method:'POST',body:fd});
     bar.style.width='70%';
     const data=await res.json().catch(()=>({}));
     bar.style.width='100%';
-    status.textContent=res.ok?'Přijato. job_id: '+(data.job_id||'n/a'):'Chyba při odeslání';
+    status.textContent=res.ok?'Přijato · job_id: '+(data.job_id||'n/a'):'Chyba při odeslání';
   }catch(err){
     status.textContent='Chyba sítě';
   }finally{
@@ -458,7 +473,7 @@ document.getElementById('tov-run').addEventListener('click',async ()=>{
   };
   const tbody=document.querySelector('#tov-table tbody');
   const sumEl=document.getElementById('tov-sum');
-  tbody.innerHTML='<tr><td colspan="6">Požadavek odeslán…</td></tr>';
+  tbody.innerHTML='<tr><td colspan="6">Požadavek odeslán</td></tr>';
   try{
     const res=await fetch(N8N_TOV_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
@@ -473,9 +488,9 @@ document.getElementById('tov-run').addEventListener('click',async ()=>{
       tbody.appendChild(tr);
     });
     sumEl.textContent=sum.toFixed(2);
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="6">Žádné položky.</td></tr>';}
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="6">Žádné položky</td></tr>';}
   }catch(e){
-    tbody.innerHTML='<tr><td colspan="6">Chyba při volání bota.</td></tr>';
+    tbody.innerHTML='<tr><td colspan="6">Chyba při volání bota</td></tr>';
     sumEl.textContent='0';
   }
 });
@@ -483,7 +498,8 @@ document.getElementById('tov-run').addEventListener('click',async ()=>{
 (function initRates(){
   const saved=JSON.parse(localStorage.getItem('stavbot_settings')||'{}');
   if(saved.rates){
-    document.getElementById('rate').value = (saved.rates.default_rate ?? 650);
+    const r = (saved.rates.default_rate ?? 650);
+    document.getElementById('rate').value = r;
   }
 })();
 document.getElementById('form-calc').addEventListener('submit',e=>{
@@ -495,10 +511,10 @@ document.getElementById('form-calc').addEventListener('submit',e=>{
   const l=+document.getElementById('l').value||0;
   const holes=+document.getElementById('holes').value||0;
   let area=0;
-  if(type==='wall'){ area=2*h*l - holes; }                 // obě líce stěny
-  else if(type==='slab'){ area=2*l*w - holes; }            // spodní+horní
-  else if(type==='column'){ area=4*h*w - holes; }          // obvod sloupu ~ 4*w
-  else if(type==='beam'){ area=2*l*w + 2*h*w - holes; }    // zjednodušeně
+  if(type==='wall'){ area=2*h*l - holes; }
+  else if(type==='slab'){ area=2*l*w - holes; }
+  else if(type==='column'){ area=4*h*w - holes; }
+  else if(type==='beam'){ area=2*l*w + 2*h*w - holes; }
   area=Math.max(0,area);
   const baseRate=+document.getElementById('rate').value||0;
   const factor=(sys==='system')?1.0:0.85;
@@ -528,9 +544,10 @@ function drawGantt(){
   ctx.fillStyle='#0c100d';
   ctx.fillRect(0,0,canvas.clientWidth,220);
   const pad=16, rowH=32, gap=8;
-  let x=pad, y=pad;
+  let y=pad;
   let dayCursor=0;
-  const dayW=Math.max(12, Math.min(40, (canvas.clientWidth-2*pad)/Math.max(10, tasks.reduce((a,t)=>a+t.days,0))));
+  const totalDays=Math.max(10, tasks.reduce((a,t)=>a+t.days,0));
+  const dayW=Math.max(12, Math.min(40, (canvas.clientWidth-2*pad)/totalDays));
   ctx.strokeStyle='rgba(255,255,255,.08)';
   for(let i=0;i<Math.ceil((canvas.clientWidth-2*pad)/dayW);i++){
     ctx.beginPath(); ctx.moveTo(pad+i*dayW, pad); ctx.lineTo(pad+i*dayW, 220-pad); ctx.stroke();
@@ -571,13 +588,13 @@ document.getElementById('admin-save').addEventListener('click',()=>{
   try{
     const obj=JSON.parse(document.getElementById('admin-json').value||'{}');
     localStorage.setItem('stavbot_settings',JSON.stringify(obj));
-    document.getElementById('admin-msg').textContent='Uloženo do LocalStorage.';
-  }catch(e){ document.getElementById('admin-msg').textContent='Neplatný JSON.'; }
+    document.getElementById('admin-msg').textContent='Uloženo do LocalStorage';
+  }catch(e){ document.getElementById('admin-msg').textContent='Neplatný JSON'; }
 });
 document.getElementById('admin-load').addEventListener('click',()=>{
   const v=localStorage.getItem('stavbot_settings')||'{}';
   document.getElementById('admin-json').value=v;
-  document.getElementById('admin-msg').textContent='Načteno z LocalStorage.';
+  document.getElementById('admin-msg').textContent='Načteno z LocalStorage';
 });
 </script>
 
