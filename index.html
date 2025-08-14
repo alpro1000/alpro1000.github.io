@@ -1,602 +1,309 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="cs">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>StavBot · Rozklad TOV OTSKP ÚRS bednění a harmonogram</title>
-<meta name="description" content="StavBot: rozpočtář v ČR · rozklad TOV z výkazu výměr, kontrola rozpočtů OTSKP a ÚRS, výpočet bednění a náčrt harmonogramu. Nahrát podklady, TOV bot, exporty.">
-<meta property="og:title" content="StavBot · rozpočtář a TOV bot">
-<meta property="og:description" content="Rozklad TOV, OTSKP a ÚRS, bednění PERI Doka i běžné, harmonogram Gantt, exporty.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="cs_CZ">
-<meta name="twitter:card" content="summary">
-<style>
-:root{--bg:#0f1410;--card:#141a15;--ink:#e8efe6;--muted:#aeb8a8;--brand:#6b8e23;--brand-2:#9acd32;--line:#1d2a21}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans","Helvetica Neue",Arial,sans-serif;line-height:1.5}
-a{color:var(--brand)}
-a:focus,button:focus,input:focus,select:focus,textarea:focus{outline:2px solid var(--brand-2);outline-offset:2px}
-header{position:sticky;top:0;backdrop-filter:saturate(1.2) blur(8px);background:rgba(20,26,21,.75);border-bottom:1px solid var(--line);z-index:40}
-.wrap{max-width:1100px;margin:auto;padding:16px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px}
-.brand-badge{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0b0f0b;font-weight:900}
-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.cta{display:flex;gap:10px;flex-wrap:wrap}
-.btn{appearance:none;border:0;border-radius:16px;background:var(--brand);color:#0b0f0b;font-weight:800;padding:14px 18px;box-shadow:0 6px 16px rgba(107,142,35,.25);cursor:pointer;transition:.2s transform,.2s background}
-.btn:hover{background:var(--brand-2);transform:translateY(-1px)}
-.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn.block{width:100%}
-.btn.tov-big{font-size:1.05rem;padding:16px 22px;border-radius:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.grid{display:grid;gap:16px}
-.hero{padding:28px 16px 12px}
-.hero h1{font-size:1.9rem;margin:.2rem 0 .5rem}
-.hero p{color:var(--muted);margin:0 0 12px}
-.section h2{font-size:1.4rem;margin:0 0 10px}
-.list{display:grid;gap:10px}
-.list .item{padding:12px;border:1px dashed var(--line);border-radius:14px}
-.kv{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-.tag{font-size:.85rem;color:var(--muted)}
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{border-bottom:1px solid var(--line);padding:10px;text-align:left}
-.small{font-size:.9rem;color:var(--muted)}
-footer{padding:30px 16px;color:var(--muted);border-top:1px solid var(--line)}
-.fab{position:fixed;right:16px;bottom:16px;background:var(--brand);color:#0b0f0b;border:0;border-radius:999px;padding:18px 22px;font-weight:900;font-size:1.05rem;box-shadow:0 14px 32px rgba(107,142,35,.4);cursor:pointer;z-index:50}
-.fab:active{transform:translateY(1px)}
-.pulse{position:relative}
-.pulse::after{content:"";position:absolute;inset:-10px;border-radius:999px;border:2px solid var(--brand-2);opacity:.5;animation:pulse 1.8s infinite}
-@keyframes pulse{0%{transform:scale(.95);opacity:.75}70%{transform:scale(1.15);opacity:.2}100%{transform:scale(1.3);opacity:0}}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;padding:0;z-index:60}
-.modal.open{display:flex}
-.modal dialog{border:0;border-radius:18px 18px 0 0;background:var(--card);color:var(--ink);margin:0;width:100%;max-width:820px;max-height:92vh;overflow:auto;padding:0}
-.modal header{position:sticky;top:0;background:var(--card);padding:12px 16px;border-bottom:1px solid var(--line)}
-.modal .content{padding:14px 16px}
-.input,select,textarea{width:100%;background:#0c100d;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px}
-.row{display:grid;gap:10px}
-.row.two{grid-template-columns:1fr 1fr}
-.row.three{grid-template-columns:1fr 1fr 1fr}
-.drop{border:2px dashed var(--brand);padding:18px;border-radius:16px;text-align:center}
-.progress{height:8px;background:#0b0f0b;border-radius:999px;overflow:hidden;border:1px solid var(--line)}
-.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand-2))}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#101810;border:1px solid var(--line);color:var(--muted);font-size:.85rem}
-.pricing{display:grid;gap:16px}
-.plan{border:1px solid var(--line);border-radius:16px;padding:14px}
-kbd{background:#0b0f0b;border:1px solid var(--line);padding:2px 6px;border-radius:6px}
-canvas{background:#0c100d;border:1px solid var(--line);border-radius:12px;display:block;width:100%;height:220px}
-@media(min-width:760px){
-  .hero{padding:40px 16px}
-  .hero h1{font-size:2.2rem}
-  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
-  .grid.cols-2{grid-template-columns:repeat(2,1fr)}
-}
-.visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px)}
-</style>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Organization","name":"StavBot","url":"https://example.com","email":"alpro1000@gmail.com","address":{"@type":"PostalAddress","addressCountry":"CZ"},"sameAs":[]}
-</script>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Service","name":"Rozpočtářské služby a TOV bot","provider":{"@type":"Organization","name":"StavBot"},"serviceType":"Rozklad TOV kontrola rozpočtů OTSKP a ÚRS výpočet bednění harmonogram","areaServed":{"@type":"Country","name":"Česko"},"availableChannel":{"@type":"ServiceChannel","servicePhone":"000 000 000"}}
-</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Rozpočty v KROS 4 (ÚRS, OTSKP) – mosty, železnice, monolity</title>
+  <meta name="description" content="Rozpočtář v ČR: KROS 4, cenová soustava ÚRS a OTSKP. Mosty, železniční stavby, monolitické konstrukce. Ceník a poptávka online.">
+  <meta property="og:title" content="Rozpočty v KROS 4 (ÚRS, OTSKP)">
+  <meta property="og:description" content="Rozpočty a kontrola v KROS 4 podle ÚRS a OTSKP. Mosty, železnice, monolity.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%23141a15'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='64' fill='%23e8efe6'>StavTOV</text></svg>">
+  <meta property="og:url" content="https://example.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root{
+      --bg:#0f1410; --card:#141a15; --ink:#e8efe6; --muted:#aeb8a8;
+      --brand:#6b8e23; --brand-2:#9acd32; --line:#1d2a21;
+      --ok:#9acd32; --warn:#ffcc66; --err:#ff6b6b;
+      --radius:22px; --shadow:0 8px 24px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+    header{position:sticky;top:0;background:rgba(15,20,16,.7);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:50}
+    .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo-badge{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800;letter-spacing:.5px}
+    nav{display:flex;gap:14px}
+    nav a{padding:10px 12px;border-radius:12px;color:var(--muted)}
+    nav a:hover{color:var(--ink);background:var(--line)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:14px;background:var(--brand);color:#0b0f0b;font-weight:700;box-shadow:var(--shadow);border:0;cursor:pointer;transition:.2s transform,.2s background}
+    .btn:hover{background:var(--brand-2);transform:translateY(-1px)}
+    .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+    .btn.ghost:hover{border-color:var(--brand-2);color:var(--brand-2)}
+    .hero{padding:48px 0 20px}
+    .hero .panel{background:radial-gradient(1200px 500px at 50% -20%,rgba(106,142,35,.15),transparent 60%),var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+    h1{font-size:clamp(26px,4vw,40px);margin:0 0 8px}
+    .lead{color:var(--muted);font-size:clamp(16px,2.5vw,18px);line-height:1.6;margin:8px 0 18px}
+    .hero-cta{display:flex;flex-wrap:wrap;gap:10px}
+    .grid{display:grid;gap:14px}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    h2{font-size:clamp(22px,3.5vw,28px);margin:0 0 10px}
+    h3{font-size:18px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .list{display:grid;gap:8px;margin:8px 0;padding:0;list-style:none}
+    .badge{display:inline-block;padding:3px 8px;border-radius:999px;background:#101610;border:1px solid var(--line);color:var(--muted);font-size:12px}
+    .price{font-weight:800;color:var(--ok)}
+    .section{padding:24px 0}
+    .table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    .table tr{background:var(--card);border:1px solid var(--line)}
+    .table td,.table th{padding:12px 14px;text-align:left}
+    .table th{color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+    .inline{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    form{display:grid;gap:12px}
+    input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f1511;color:var(--ink)}
+    input::file-selector-button{border:0;background:var(--brand);color:#0b0f0b;padding:8px 12px;border-radius:10px;margin-right:10px;cursor:pointer}
+    footer{padding:22px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}
+    .pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+    .fab{position:fixed;right:16px;bottom:16px;border-radius:999px;padding:14px 18px;background:var(--brand);color:#0b0f0b;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,.5);cursor:pointer;animation:pulse 3s infinite}
+    .fab:hover{background:var(--brand-2)}
+    @keyframes pulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+    .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    @media (max-width:840px){.grid.cols-3{grid-template-columns:1fr}}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"StavTOV",
+    "email":"alpro1000@gmail.com",
+    "url":"https://example.com",
+    "logo":"https://example.com/logo.png",
+    "address":{"@type":"PostalAddress","addressCountry":"CZ"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    "serviceType":"Rozpočty v KROS 4 (ÚRS, OTSKP)",
+    "provider":{"@type":"Organization","name":"StavTOV"},
+    "areaServed":"CZ",
+    "description":"Rozpočty a kontrola rozpočtů v KROS 4 s využitím cenové soustavy ÚRS a OTSKP. Mosty, železniční a monolitické stavby.",
+    "offers":{
+      "@type":"Offer",
+      "priceCurrency":"CZK",
+      "priceSpecification":[
+        {"@type":"UnitPriceSpecification","name":"Rychlá kontrola (do 100 položek)","price":3900},
+        {"@type":"UnitPriceSpecification","name":"Rozklad T-O-V (1 položka)","price":290},
+        {"@type":"UnitPriceSpecification","name":"Hodinová sazba","price":950}
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
-<header aria-label="Hlavní nabídka">
-  <div class="wrap">
-    <nav>
-      <div class="brand" aria-label="Značka">
-        <span class="brand-badge" aria-hidden="true">SB</span>
-        <span>StavBot</span>
-      </div>
-      <div class="cta" aria-label="Akce">
-        <button class="btn tov-big" id="cta-bot-top" aria-controls="bot-modal" aria-expanded="false">TOV bot</button>
-        <button class="btn" id="cta-calc" aria-controls="harmo-modal" aria-expanded="false">Zahájit kalkulaci</button>
-        <button class="btn secondary" id="cta-intake" aria-controls="intake-modal" aria-expanded="false">Nahrát podklady</button>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <section class="hero wrap">
-    <div class="card">
-      <h1>Rozpočtář pro ČR a TOV bot</h1>
-      <p><strong>Rozklad TOV z výkazu výměr, kontrola rozpočtů OTSKP a ÚRS, výpočet bednění a náčrt harmonogramu rychle a přehledně.</strong> Pro jakoukoliv stavbu · mosty · železnice · pozemní stavby.</p>
-      <p class="small">OTSKP je ceník Ministerstva dopravy a TOV si skládáme sami. OTSKP slouží pouze jako orientační cenová hladina.</p>
-    </div>
-  </section>
-
-  <section class="wrap section">
-    <div class="grid cols-3">
-      <div class="card">
-        <h2>Služby</h2>
-        <div class="list">
-          <div class="item">Rozklad TOV práce stroje materiál z výkazu výměr</div>
-          <div class="item">Bednění PERI Doka i běžné · výměry a orientační náklady</div>
-          <div class="item">Kontrola rozpočtů OTSKP a ÚRS KROS</div>
-          <div class="item">Harmonogram Gantt z norem a produktivit</div>
-          <div class="item">Export XLSX CSV JSON</div>
-        </div>
-      </div>
-      <div class="card">
-        <h2>Jak to funguje</h2>
-        <ol class="list">
-          <li class="item">Nahrajete PDF DOCX XLSX CSV DWG PNG JPG ZIP nebo vložíte URL.</li>
-          <li class="item">Backend sjednotí podklady do <span class="badge">project.json</span>.</li>
-          <li class="item">TOV bot navrhne T O V pro položky doplníte poznámky.</li>
-          <li class="item">Spočítáme bednění a náčrt harmonogramu Gantt.</li>
-          <li class="item">Dostanete exporty XLSX CSV JSON a sumarizaci.</li>
-        </ol>
-      </div>
-      <div class="card">
-        <h2>TOV bot</h2>
-        <p>Navrhne T O V pro libovolnou položku OTSKP nebo vlastní název. Přidá odůvodnění a orientační cenu. Umí rychlý výpočet bednění a základní harmonogram.</p>
-        <div class="kv">
-          <span class="tag">Profil norem množství MJ poznámka → výstup T O V</span>
-          <span class="badge">LLM přes n8n</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap section">
-    <div class="grid cols-2">
-      <div class="card">
-        <h2>Ceník</h2>
-        <div class="pricing">
-          <div class="plan"><strong>Free</strong><br><span class="small">1 až 2 položky bez bednění</span></div>
-          <div class="plan"><strong>PRO</strong><br><span class="small">Plný TOV a bednění a exporty</span></div>
-          <div class="plan"><strong>Expert</strong><br><span class="small">Firemní normy a historie projektů</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <h2>FAQ</h2>
-        <details>
-          <summary>Jak pracujete s OTSKP a ÚRS</summary>
-          <p>OTSKP používám jako cenovou hladinu MD. TOV skládám individuálně dle projektu a praxe. ÚRS KROS pro normy a kontrolu.</p>
-        </details>
-        <details>
-          <summary>Jaké formáty mohu nahrát</summary>
-          <p>PDF DOCX XLSX CSV DWG PNG JPG TIF ZIP i URL.</p>
-        </details>
-        <details>
-          <summary>Jak vzniká harmonogram</summary>
-          <p>Z norem ÚRS a z vašich nebo našich realizovaných produktivit. Délky se přepočítají na dny.</p>
-        </details>
-        <details>
-          <summary>Mohu použít firemní normy</summary>
-          <p>Ano. V Admin · Data a Učení nahrajete normy a předpisy i minulé rozpočty.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap section">
-    <div class="card">
-      <h2>Data a Učení</h2>
-      <div class="grid cols-2">
+  <header>
+    <div class="wrap bar">
+      <div class="logo">
+        <div class="logo-badge" aria-hidden="true">ST</div>
         <div>
-          <h3 class="tag">Kdy</h3>
-          <ul>
-            <li>Nové verze TKP ČSN Směrnic SŽ ihned</li>
-            <li>Před většími výběrovými řízeními</li>
-            <li>Po dokončení projektu produktivity a TOV</li>
-            <li>Měsíčně reindexovat pravidla a sazby</li>
+          <div style="font-weight:800;letter-spacing:.5px">StavTOV</div>
+          <div class="muted" style="font-size:12px">Rozpočty v KROS&nbsp;4 · ÚRS · OTSKP</div>
+        </div>
+      </div>
+      <nav aria-label="Hlavní navigace">
+        <a href="#sluzby">Služby</a>
+        <a href="#cenik">Ceník</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="panel">
+          <h1>Rozpočty v KROS&nbsp;4 (ÚRS, OTSKP) — mosty, železnice, monolity</h1>
+          <p class="lead">Dělám rozpočty a kontrolu rozpočtů v <strong>KROS&nbsp;4</strong> s využitím <strong>cenové soustavy&nbsp;ÚRS</strong> a <strong>OTSKP</strong>. Zkušenost z mostních, železničních a monolitických staveb. Rychle, přehledně, bez planých slibů.</p>
+          <div class="hero-cta">
+            <a class="btn" href="#kontakt" aria-label="Odeslat poptávku">Poptat rozpočet</a>
+            <a class="btn ghost" href="#nahrat" aria-label="Nahrát podklady">Nahrát podklady</a>
+            <span class="pill">Termín a cena: dle domluvy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sluzby" class="section">
+      <div class="wrap grid cols-3">
+        <div class="card">
+          <h3>Rozpočet v KROS&nbsp;4</h3>
+          <p class="muted">Zpracování rozpočtu podle ÚRS/OTSKP. Jasná struktura, jednotky MJ, kontrola množství.</p>
+          <ul class="list">
+            <li>ÚRS – databázové ceny (edice dle projektu)</li>
+            <li>OTSKP – hladina cen Ministerstva dopravy</li>
+            <li>Export do XLSX/PDF</li>
           </ul>
         </div>
-        <div>
-          <h3 class="tag">Kam</h3>
-          <ol>
-            <li>Normy a předpisy → <strong>Admin · Data a Učení</strong> → odeslat na <span class="badge">N8N_RULES_URL</span> vznikne JSON pravidla.</li>
-            <li>Realizované rozpočty → <span class="badge">N8N_PROJECTS_URL</span> uloží TOV a produktivity.</li>
-            <li>Máte vlastní JSON → použijte <em>Admin · Import JSON</em> do LocalStorage.</li>
+        <div class="card">
+          <h3>Kontrola &amp; validace</h3>
+          <p class="muted">Druhé oči k rozpočtu: chybějící/duplicitní položky, nesoulad MJ, odhady T-O-V.</p>
+          <ul class="list">
+            <li>Rychlý screening do 100 položek</li>
+            <li>Detailní kontrola u rozsáhlých VV</li>
+            <li>Doporučení k úpravám</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Rozklad T-O-V (orientačně)</h3>
+          <p class="muted">Pro typové položky navrhnu práci/stroje/materiál jako podklad pro jednání.</p>
+          <ul class="list">
+            <li>Mosty, železnice, monolity</li>
+            <li>Praktické sazby dle dohody</li>
+            <li>Souhrn v XLSX</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="jak" class="section">
+      <div class="wrap grid">
+        <div class="card">
+          <h2>Jak postupuji</h2>
+          <ol class="list" style="list-style:decimal inside">
+            <li>Pošlete výkaz výměr nebo podklady (PDF/XLSX/ZIP).</li>
+            <li>Potvrdíme rozsah, edici ÚRS, specifika (most/ŽD/monolity).</li>
+            <li>Zpracování v KROS&nbsp;4, kontrola a export.</li>
           </ol>
+          <div class="inline">
+            <span class="badge">KROS 4</span>
+            <span class="badge">ÚRS</span>
+            <span class="badge">OTSKP</span>
+            <span class="badge">XLSX / PDF</span>
+          </div>
         </div>
       </div>
-      <p class="small">Backend sjednotí cokoliv do <strong>project.json</strong> se strukturou projekt vstup výkaz_výmer omezení poznámky.</p>
-    </div>
-  </section>
+    </section>
 
-  <section class="wrap section">
-    <div class="card">
-      <h2>Kontakt</h2>
-      <p>E mail: <a href="mailto:alpro1000@gmail.com">alpro1000@gmail.com</a> · Telefon: 000 000 000</p>
-      <form action="https://formspree.io/f/mayvlpov" method="POST" class="grid">
-        <label>Váš e mail<input class="input" type="email" name="email" required aria-label="Váš email"></label>
-        <label>Zpráva<textarea class="input" name="message" rows="4" required aria-label="Zpráva"></textarea></label>
-        <button class="btn" type="submit">Odeslat</button>
-      </form>
-    </div>
-  </section>
-</main>
-
-<footer class="wrap">
-  <div class="kv">
-    <span>© <span id="y"></span> StavBot · rozpočtář v ČR</span>
-    <a href="#" id="open-admin" aria-controls="admin-modal" aria-expanded="false">Admin</a>
-  </div>
-</footer>
-
-<button class="fab pulse" id="fab-chat" aria-label="tov bot" aria-controls="bot-modal" aria-expanded="false">TOV bot</button>
-
-<div class="modal" id="bot-modal" role="dialog" aria-modal="true" aria-labelledby="bot-title">
-  <dialog>
-    <header><strong id="bot-title">TOV bot</strong></header>
-    <div class="content grid">
-      <div class="row two">
-        <label>Profil norem
-          <select id="profile" class="input" aria-label="Profil norem">
-            <option value="REFERENCE">REFERENCE ÚRS</option>
-            <option value="FIRM">FIRM firemní</option>
-          </select>
-        </label>
-        <label>OTSKP nebo název položky
-          <input id="item" class="input" placeholder="např. 12273A Betonáž opěry">
-        </label>
-      </div>
-      <div class="row three">
-        <label>Množství
-          <input id="qty" class="input" type="number" step="0.0001" min="0" value="1">
-        </label>
-        <label>MJ
-          <input id="uom" class="input" placeholder="m m2 m3 ks" value="m3">
-        </label>
-        <label>Poznámka
-          <input id="note" class="input" placeholder="specifikace omezení apod.">
-        </label>
-      </div>
-      <button class="btn tov-big" id="tov-run">Navrhnout TOV</button>
-      <div class="card" aria-live="polite">
-        <table class="table" id="tov-table">
-          <thead><tr><th>Typ</th><th>Popis</th><th>Množství</th><th>MJ</th><th>Jedn. cena</th><th>Celkem</th></tr></thead>
-          <tbody></tbody>
-          <tfoot><tr><th colspan="5" style="text-align:right">Součet</th><th id="tov-sum">0</th></tr></tfoot>
-        </table>
-      </div>
-
-```
-  <h3 class="tag">Mini kalkulátor bednění</h3>
-  <form id="form-calc" class="grid">
-    <div class="row two">
-      <label>Typ prvku
-        <select id="el-type" class="input">
-          <option value="wall">Stěna</option>
-          <option value="slab">Deska</option>
-          <option value="column">Sloup</option>
-          <option value="beam">Průvlak</option>
-        </select>
-      </label>
-      <label>Systém
-        <select id="form-type" class="input">
-          <option value="system">Systémové</option>
-          <option value="plain">Běžné</option>
-        </select>
-      </label>
-    </div>
-    <div class="row three">
-      <label>H nebo tloušťka [m]<input id="h" class="input" type="number" step="0.001" min="0" value="3"></label>
-      <label>Šířka [m]<input id="w" class="input" type="number" step="0.001" min="0" value="0.3"></label>
-      <label>Délka [m]<input id="l" class="input" type="number" step="0.001" min="0" value="10"></label>
-    </div>
-    <div class="row two">
-      <label>Otvory [m²]<input id="holes" class="input" type="number" step="0.01" min="0" value="0"></label>
-      <label>Jedn. sazba Kč m²<input id="rate" class="input" type="number" step="1" min="0" value="650"></label>
-    </div>
-    <button class="btn" type="submit">Spočítat</button>
-  </form>
-  <div class="kv">
-    <div id="calc-out" class="small">m²: 0 · Náklady: 0 Kč</div>
-    <span class="tag">Výchozí sazby lze změnit v Admin · Data a Učení</span>
-  </div>
-</div>
-```
-
-  </dialog>
-</div>
-
-<div class="modal" id="harmo-modal" role="dialog" aria-modal="true" aria-labelledby="harmo-title">
-  <dialog>
-    <header><strong id="harmo-title">Harmonogram Gantt</strong></header>
-    <div class="content grid">
-      <div class="card">
-        <table class="table" id="harmo-table" aria-label="Úkoly harmonogramu">
-          <thead><tr><th>Název</th><th>MJ</th><th>Qty</th><th>Produktivita za den</th></tr></thead>
-          <tbody>
-            <tr><td contenteditable="true">Výkop</td><td contenteditable="true">m3</td><td contenteditable="true">100</td><td contenteditable="true">20</td></tr>
-            <tr><td contenteditable="true">Bednění</td><td contenteditable="true">m2</td><td contenteditable="true">200</td><td contenteditable="true">50</td></tr>
-            <tr><td contenteditable="true">Betonáž</td><td contenteditable="true">m3</td><td contenteditable="true">80</td><td contenteditable="true">16</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="row two">
-        <button class="btn" id="harmo-recalc">Přepočítat Gantt</button>
-        <button class="btn secondary" id="harmo-export">Export CSV</button>
-      </div>
-      <canvas id="gantt" height="220" aria-label="Gantt"></canvas>
-      <div class="small">Dny se počítají jako <kbd>ceil qty děleno produktivita</kbd> a řadí se sekvenčně.</div>
-    </div>
-  </dialog>
-</div>
-  <h3 class="tag">Mini kalkulátor bednění</h3>
-  <form id="form-calc" class="grid">
-    <div class="row two">
-      <label>Typ prvku
-        <select id="el-type" class="input">
-          <option value="wall">Stěna</option>
-          <option value="slab">Deska</option>
-          <option value="column">Sloup</option>
-          <option value="beam">Průvlak</option>
-        </select>
-      </label>
-      <label>Systém
-        <select id="form-type" class="input">
-          <option value="system">Systémové</option>
-          <option value="plain">Běžné</option>
-        </select>
-      </label>
-    </div>
-    <div class="row three">
-      <label>H nebo tloušťka [m]<input id="h" class="input" type="number" step="0.001" min="0" value="3"></label>
-      <label>Šířka [m]<input id="w" class="input" type="number" step="0.001" min="0" value="0.3"></label>
-      <label>Délka [m]<input id="l" class="input" type="number" step="0.001" min="0" value="10"></label>
-    </div>
-    <div class="row two">
-      <label>Otvory [m²]<input id="holes" class="input" type="number" step="0.01" min="0" value="0"></label>
-      <label>Jedn. sazba Kč m²<input id="rate" class="input" type="number" step="1" min="0" value="650"></label>
-    </div>
-    <button class="btn" type="submit">Spočítat</button>
-  </form>
-  <div class="kv">
-    <div id="calc-out" class="small">m²: 0 · Náklady: 0 Kč</div>
-    <span class="tag">Výchozí sazby lze změnit v Admin · Data a Učení</span>
-  </div>
-</div>
-
-<div class="modal" id="intake-modal" role="dialog" aria-modal="true" aria-labelledby="intake-title">
-  <dialog>
-    <header><strong id="intake-title">Nahrát podklady</strong></header>
-    <div class="content grid">
-      <div class="row two">
-        <label>Název projektu<input id="project-name" class="input" placeholder="Projekt ABC"></label>
-        <label>URL podkladů<input id="project-url" class="input" type="url" placeholder="https://..."></label>
-      </div>
-      <div id="drop" class="drop" tabindex="0" aria-label="Zóna pro nahrání">
-        Přetáhněte soubory sem nebo vyberte níže
-      </div>
-      <input id="files" type="file" multiple accept=".pdf,.doc,.docx,.xlsx,.csv,.dwg,.png,.jpg,.jpeg,.tif,.tiff,.zip" aria-label="Soubory">
-      <button class="btn" id="send-intake">Odeslat k analýze</button>
-      <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-      <div id="intake-status" class="small" aria-live="polite"></div>
-      <p class="small">Normalizace JSON project.json obsahuje · projekt · vstup · výkaz_výmer · omezení · poznámky.</p>
-    </div>
-  </dialog>
-</div>
-
-<div class="modal" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
-  <dialog>
-    <header><strong id="admin-title">Admin · Data a Učení</strong></header>
-    <div class="content grid">
-      <div class="card">
-        <h3>Instrukce</h3>
-        <ul>
-          <li>Normy a předpisy nahrajte jako PDF DOCX XLSX CSV DWG ZIP nebo URL → odeslat na <span class="badge">N8N_RULES_URL</span> vznikne tkp_rules.json.</li>
-          <li>Realizované rozpočty XLSX CSV ZIP → <span class="badge">N8N_PROJECTS_URL</span> uloží TOV a produktivity.</li>
-          <li>Souborové názvy · CZ_TKP18_2022.pdf · CSN_EN_206_2023.pdf · SZ_Smernice_S13_2024.pdf · Projekt_ABC_2024_vykaz.xlsx</li>
-          <li>Metadata JSON · standard_id publisher jurisdiction language edition_date clause text_cs severity check applicability</li>
-          <li>LLM netrénujeme online · děláme grounding pravidla a vyhledávání a vaše data.</li>
-        </ul>
-      </div>
-      <div class="row two">
-        <label>Import JSON do LocalStorage
-          <textarea id="admin-json" class="input" rows="6" placeholder='{"rules":[],"rates":{"default_rate":650}}'></textarea>
-        </label>
-        <div class="grid">
-          <button class="btn" id="admin-save">Uložit JSON</button>
-          <button class="btn secondary" id="admin-load">Načíst JSON</button>
+    <section id="cenik" class="section">
+      <div class="wrap grid">
+        <div class="card">
+          <h2>Ceník (orientační)</h2>
+          <table class="table" aria-label="Ceník služeb">
+            <thead><tr><th>Služba</th><th>Popis</th><th>Cena</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Rychlá kontrola rozpočtu</td>
+                <td class="muted">Do 100 položek · report chyb/duplicit</td>
+                <td class="price">3&nbsp;900&nbsp;Kč</td>
+              </tr>
+              <tr>
+                <td>Rozklad T-O-V (1 položka)</td>
+                <td class="muted">Orientační práce/stroje/materiál</td>
+                <td class="price">290&nbsp;Kč / ks</td>
+              </tr>
+              <tr>
+                <td>Hodinová sazba</td>
+                <td class="muted">Konzultace, úpravy, kontrola</td>
+                <td class="price">950&nbsp;Kč / h</td>
+              </tr>
+              <tr>
+                <td>Kompletní rozpočet</td>
+                <td class="muted">Mosty / ŽD / monolity – dle podkladů</td>
+                <td class="price">dle domluvy</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="muted" style="margin-top:8px">Ceny jsou bez DPH, orientační. Konečná nabídka po zhlédnutí podkladů a domluvě rozsahu.</p>
         </div>
       </div>
-      <div id="admin-msg" class="small" aria-live="polite"></div>
+    </section>
+
+    <section id="nahrat" class="section">
+      <div class="wrap grid">
+        <div class="card">
+          <h2>Nahrát podklady / Poptávka</h2>
+          <form id="contact-form" action="https://formspree.io/f/your-id" method="POST" enctype="multipart/form-data">
+            <label>
+              <span class="sr">Jméno</span>
+              <input name="name" type="text" placeholder="Jméno / firma" required>
+            </label>
+            <label>
+              <span class="sr">E-mail</span>
+              <input name="_replyto" type="email" placeholder="E-mail" required>
+            </label>
+            <label>
+              <span class="sr">Zpráva</span>
+              <textarea name="message" rows="4" placeholder="Stručně rozsah: most/ŽD/monolit, edice ÚRS, termín…"></textarea>
+            </label>
+            <label>
+              <span class="sr">Soubory</span>
+              <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx">
+            </label>
+            <div class="inline">
+              <button class="btn" type="submit">Odeslat</button>
+              <span id="form-status" class="muted" role="status" aria-live="polite"></span>
+            </div>
+            <input type="hidden" name="subject" value="Poptávka – Rozpočty KROS 4 (ÚRS/OTSKP)">
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontakt" class="section">
+      <div class="wrap grid cols-3">
+        <div class="card">
+          <h2>Kontakt</h2>
+          <p><strong>E-mail:</strong> <a href="mailto:alpro1000@gmail.com">alpro1000@gmail.com</a></p>
+          <p><strong>Telefon:</strong> <span class="muted">+420&nbsp;XXX&nbsp;XXX&nbsp;XXX</span> (dle domluvy)</p>
+          <p class="muted">Působnost: celá ČR · online schůzka do 24&nbsp;h dle vytížení.</p>
+        </div>
+        <div class="card">
+          <h3>Specializace</h3>
+          <ul class="list">
+            <li>Mostní objekty</li>
+            <li>Železniční stavby</li>
+            <li>Monolitické konstrukce</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Podklady vítané</h3>
+          <ul class="list">
+            <li>Výkaz výměr (XLSX/PDF)</li>
+            <li>Projekt / specifikace (PDF/ZIP)</li>
+            <li>Edice ÚRS / požadavek na OTSKP</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <a class="fab" href="#kontakt" aria-label="Poptat rozpočet">Poptat</a>
+
+  <footer>
+    <div class="wrap inline" style="justify-content:space-between">
+      <div>© <span id="y"></span> StavTOV · Rozpočty v KROS&nbsp;4 · ÚRS · OTSKP</div>
+      <div class="muted">RTS se neuvádí</div>
     </div>
-  </dialog>
-</div>
+  </footer>
 
-<script>
-const N8N_INTAKE_URL   ='https://YOUR_N8N_HOST/webhook/intake';
-const N8N_TOV_URL      ='https://YOUR_N8N_HOST/webhook/tov';
-const N8N_STATUS_URL   ='https://YOUR_N8N_HOST/webhook/status';
-const N8N_RULES_URL    ='https://YOUR_N8N_HOST/webhook/rules';
-const N8N_PROJECTS_URL ='https://YOUR_N8N_HOST/webhook/projects';
+  <script>
+    // Rok ve footeru
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-document.getElementById('y').textContent=new Date().getFullYear();
-
-function openModal(id){
-  const m=document.getElementById(id);
-  if(!m)return;
-  m.classList.add('open');
-  const dlg=m.querySelector('dialog'); if(dlg){dlg.setAttribute('open','');}
-}
-function closeModal(el){
-  const m=el.closest('.modal'); if(!m)return;
-  const dlg=m.querySelector('dialog'); if(dlg){dlg.removeAttribute('open');}
-  m.classList.remove('open');
-}
-['bot-modal','harmo-modal','intake-modal','admin-modal'].forEach(id=>{
-  const modal=document.getElementById(id);
-  modal.addEventListener('click',e=>{ if(e.target===modal) closeModal(e.target); });
-  modal.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(e.target); });
-});
-document.getElementById('fab-chat').addEventListener('click',()=>openModal('bot-modal'));
-document.getElementById('cta-bot-top').addEventListener('click',()=>openModal('bot-modal'));
-document.getElementById('cta-calc').addEventListener('click',()=>openModal('harmo-modal'));
-document.getElementById('cta-intake').addEventListener('click',()=>openModal('intake-modal'));
-document.getElementById('open-admin').addEventListener('click',(e)=>{e.preventDefault();openModal('admin-modal');});
-
-const drop=document.getElementById('drop');
-const filesInput=document.getElementById('files');
-drop.addEventListener('dragover',e=>{e.preventDefault(); drop.style.borderColor='var(--brand-2)';});
-drop.addEventListener('dragleave',()=>{drop.style.borderColor='var(--brand)';});
-drop.addEventListener('drop',e=>{
-  e.preventDefault(); drop.style.borderColor='var(--brand)';
-  filesInput.files=e.dataTransfer.files;
-});
-
-document.getElementById('send-intake').addEventListener('click',async ()=>{
-  const name=document.getElementById('project-name').value.trim();
-  const url=document.getElementById('project-url').value.trim();
-  const status=document.getElementById('intake-status');
-  const bar=document.getElementById('bar');
-  const fd=new FormData();
-  fd.append('project_name',name||'Nepojmenovaný projekt');
-  if(url) fd.append('source_url',url);
-  for(const f of filesInput.files) fd.append('files',f,f.name);
-  status.textContent='Odesílám';
-  bar.style.width='20%';
-  try{
-    const res=await fetch(N8N_INTAKE_URL,{method:'POST',body:fd});
-    bar.style.width='70%';
-    const data=await res.json().catch(()=>({}));
-    bar.style.width='100%';
-    status.textContent=res.ok?'Přijato · job_id: '+(data.job_id||'n/a'):'Chyba při odeslání';
-  }catch(err){
-    status.textContent='Chyba sítě';
-  }finally{
-    setTimeout(()=>{bar.style.width='0%';},1200);
-  }
-});
-
-document.getElementById('tov-run').addEventListener('click',async ()=>{
-  const payload={
-    profile:document.getElementById('profile').value,
-    item:document.getElementById('item').value,
-    qty:parseFloat(document.getElementById('qty').value||'0'),
-    uom:document.getElementById('uom').value||'',
-    note:document.getElementById('note').value||''
-  };
-  const tbody=document.querySelector('#tov-table tbody');
-  const sumEl=document.getElementById('tov-sum');
-  tbody.innerHTML='<tr><td colspan="6">Požadavek odeslán</td></tr>';
-  try{
-    const res=await fetch(N8N_TOV_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const data=await res.json();
-    const rows=Array.isArray(data.items)?data.items:[];
-    tbody.innerHTML='';
-    let sum=0;
-    rows.forEach(r=>{
-      const total=(+r.qty||0)*(+r.unit_price||0);
-      sum+=total;
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${r.type||''}</td><td>${r.desc||''}</td><td>${r.qty||''}</td><td>${r.uom||''}</td><td>${r.unit_price||''}</td><td>${total.toFixed(2)}</td>`;
-      tbody.appendChild(tr);
+    // Odeslání formuláře (Formspree placeholder)
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('form-status');
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      statusEl.textContent = 'Odesílám…';
+      const data = new FormData(form);
+      try{
+        const r = await fetch(form.action, { method:'POST', body:data, headers: { 'Accept':'application/json' } });
+        if(r.ok){
+          statusEl.textContent = 'Děkuji, ozvu se.';
+          form.reset();
+        }else{
+          statusEl.textContent = 'Nepodařilo se odeslat. Napište prosím na e-mail.';
+        }
+      }catch(err){
+        statusEl.textContent = 'Chyba připojení. Zkuste to prosím znovu.';
+      }
     });
-    sumEl.textContent=sum.toFixed(2);
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="6">Žádné položky</td></tr>';}
-  }catch(e){
-    tbody.innerHTML='<tr><td colspan="6">Chyba při volání bota</td></tr>';
-    sumEl.textContent='0';
-  }
-});
-
-(function initRates(){
-  const saved=JSON.parse(localStorage.getItem('stavbot_settings')||'{}');
-  if(saved.rates){
-    const r = (saved.rates.default_rate ?? 650);
-    document.getElementById('rate').value = r;
-  }
-})();
-document.getElementById('form-calc').addEventListener('submit',e=>{
-  e.preventDefault();
-  const type=document.getElementById('el-type').value;
-  const sys=document.getElementById('form-type').value;
-  const h=+document.getElementById('h').value||0;
-  const w=+document.getElementById('w').value||0;
-  const l=+document.getElementById('l').value||0;
-  const holes=+document.getElementById('holes').value||0;
-  let area=0;
-  if(type==='wall'){ area=2*h*l - holes; }
-  else if(type==='slab'){ area=2*l*w - holes; }
-  else if(type==='column'){ area=4*h*w - holes; }
-  else if(type==='beam'){ area=2*l*w + 2*h*w - holes; }
-  area=Math.max(0,area);
-  const baseRate=+document.getElementById('rate').value||0;
-  const factor=(sys==='system')?1.0:0.85;
-  const cost=area*baseRate*factor;
-  document.getElementById('calc-out').textContent=`m²: ${area.toFixed(2)} · Náklady: ${Math.round(cost).toLocaleString('cs-CZ')} Kč`;
-});
-
-function parseHarmo(){
-  const rows=[...document.querySelectorAll('#harmo-table tbody tr')];
-  return rows.map(tr=>{
-    const tds=[...tr.children].map(td=>td.textContent.trim());
-    const name=tds[0]||'Úkol';
-    const qty=parseFloat(tds[2]||'0');
-    const prod=Math.max(0.0001,parseFloat(tds[3]||'0'));
-    const days=Math.ceil(qty/prod);
-    return {name,qty,prod,days};
-  });
-}
-function drawGantt(){
-  const tasks=parseHarmo();
-  const canvas=document.getElementById('gantt');
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width=canvas.clientWidth*devicePixelRatio;
-  const H=canvas.height=220*devicePixelRatio;
-  ctx.scale(devicePixelRatio,devicePixelRatio);
-  ctx.clearRect(0,0,canvas.clientWidth,220);
-  ctx.fillStyle='#0c100d';
-  ctx.fillRect(0,0,canvas.clientWidth,220);
-  const pad=16, rowH=32, gap=8;
-  let y=pad;
-  let dayCursor=0;
-  const totalDays=Math.max(10, tasks.reduce((a,t)=>a+t.days,0));
-  const dayW=Math.max(12, Math.min(40, (canvas.clientWidth-2*pad)/totalDays));
-  ctx.strokeStyle='rgba(255,255,255,.08)';
-  for(let i=0;i<Math.ceil((canvas.clientWidth-2*pad)/dayW);i++){
-    ctx.beginPath(); ctx.moveTo(pad+i*dayW, pad); ctx.lineTo(pad+i*dayW, 220-pad); ctx.stroke();
-  }
-  tasks.forEach((t,i)=>{
-    const start=dayCursor;
-    const w=t.days*dayW;
-    const rx=pad+start*dayW, ry=y+i*(rowH+gap);
-    ctx.fillStyle='rgba(154,205,50,.9)';
-    ctx.fillRect(rx,ry,w,rowH);
-    ctx.fillStyle='#0b0f0b';
-    ctx.font='12px system-ui';
-    ctx.fillText(`${t.name} (${t.days} d)`, rx+6, ry+18);
-    dayCursor+=t.days;
-  });
-}
-drawGantt();
-document.getElementById('harmo-recalc').addEventListener('click',drawGantt);
-window.addEventListener('resize',drawGantt);
-document.getElementById('harmo-export').addEventListener('click',()=>{
-  const tasks=parseHarmo();
-  const lines=['nazev,mj,qty,produktivita_den,dny'];
-  const rows=[...document.querySelectorAll('#harmo-table tbody tr')];
-  rows.forEach((tr,i)=>{
-    const t=tasks[i];
-    const mj=tr.children[1].textContent.trim();
-    const qty=tr.children[2].textContent.trim();
-    const prod=tr.children[3].textContent.trim();
-    lines.push(`"${t.name}",${mj},${qty},${prod},${t.days}`);
-  });
-  const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='harmonogram.csv'; a.click();
-  URL.revokeObjectURL(url);
-});
-
-document.getElementById('admin-save').addEventListener('click',()=>{
-  try{
-    const obj=JSON.parse(document.getElementById('admin-json').value||'{}');
-    localStorage.setItem('stavbot_settings',JSON.stringify(obj));
-    document.getElementById('admin-msg').textContent='Uloženo do LocalStorage';
-  }catch(e){ document.getElementById('admin-msg').textContent='Neplatný JSON'; }
-});
-document.getElementById('admin-load').addEventListener('click',()=>{
-  const v=localStorage.getItem('stavbot_settings')||'{}';
-  document.getElementById('admin-json').value=v;
-  document.getElementById('admin-msg').textContent='Načteno z LocalStorage';
-});
-</script>
-
+  </script>
 </body>
 </html>
