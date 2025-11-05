@@ -1,0 +1,20 @@
+# robots.txt for msplus.cz
+# Stavební rozpočty KROS4 - ÚRS, OTSKP
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://msplus.cz/sitemap.xml
+
+# Crawl-delay for Seznam.cz (recommended)
+User-agent: SeznamBot
+Crawl-delay: 1
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
