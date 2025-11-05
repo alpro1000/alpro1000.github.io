@@ -8,17 +8,41 @@
   <link rel="canonical" href="https://alpro1000.github.io/gdpr.html">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>
-    body{margin:0;background:#0f1410;color:#e8efe6;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    a{color:inherit}
+    :root{
+      --bg:#0f1410; --card:#141a15; --ink:#e8efe6; --muted:#aeb8a8;
+      --brand:#6b8e23; --brand-2:#9acd32; --line:#1d2a21;
+      --shadow:0 8px 24px rgba(0,0,0,.35);
+      --glow:0 0 20px rgba(107,142,35,.3);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;animation:fadeIn .6s ease}
+    a{color:var(--brand-2);text-decoration:none;transition:all .3s ease;border-bottom:1px solid transparent}
+    a:hover{color:var(--brand);border-bottom-color:var(--brand);transform:translateY(-1px)}
     .wrap{max-width:880px;margin:0 auto;padding:32px 18px 64px}
-    header{background:#141a15;border-bottom:1px solid #1d2a21;padding:18px}
-    nav{display:flex;justify-content:space-between;align-items:center;gap:16px}
-    .badge{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6b8e23,#9acd32);color:#0a0f0a;font-weight:800}
-    h1{font-size:clamp(26px,4vw,36px);margin:24px 0 12px}
-    h2{font-size:22px;margin:32px 0 12px}
-    p{line-height:1.6;margin:12px 0}
-    ul{margin:12px 0 12px 22px;line-height:1.6}
-    footer{border-top:1px solid #1d2a21;padding:24px 18px;color:#aeb8a8;font-size:14px;text-align:center}
+    header{background:var(--card);border-bottom:1px solid var(--line);padding:18px;box-shadow:var(--shadow);position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+    .badge{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800;transition:all .3s ease;box-shadow:0 4px 12px rgba(107,142,35,.3)}
+    .badge:hover{transform:rotate(5deg) scale(1.05);box-shadow:var(--glow)}
+    nav a{padding:10px 16px;border-radius:12px;border:1px solid var(--line);color:var(--muted);background:transparent;transition:all .3s ease;display:inline-block}
+    nav a:hover{color:var(--ink);border-color:var(--brand);background:rgba(107,142,35,.1);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+    h1{font-size:clamp(26px,4vw,36px);margin:24px 0 12px;background:linear-gradient(135deg,var(--ink),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeInUp .8s ease}
+    h2{font-size:22px;margin:32px 0 12px;color:var(--brand-2);transition:color .3s ease;position:relative;padding-left:16px}
+    h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:80%;background:linear-gradient(180deg,var(--brand),var(--brand-2));border-radius:2px}
+    h2:hover{color:var(--brand)}
+    p{line-height:1.7;margin:12px 0;color:var(--ink);transition:transform .3s ease}
+    p:hover{transform:translateX(4px)}
+    ul{margin:12px 0 12px 22px;line-height:1.7}
+    ul li{margin:8px 0;transition:all .3s ease;position:relative;padding-left:8px}
+    ul li::marker{color:var(--brand-2)}
+    ul li:hover{transform:translateX(4px);color:var(--brand-2)}
+    strong{color:var(--brand-2);font-weight:700}
+    footer{border-top:1px solid var(--line);padding:24px 18px;color:var(--muted);font-size:14px;text-align:center;transition:all .3s ease}
+    footer:hover{color:var(--ink)}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    @media (max-width:640px){nav{flex-direction:column;align-items:stretch}}
   </style>
 </head>
 <body>
