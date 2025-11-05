@@ -289,38 +289,42 @@
       <div class="wrap grid">
         <div class="card">
           <h2>Poptávka / nahrání podkladů</h2>
-          <!-- TODO: Replace 'YOUR_FORMSPREE_ID' with your actual Formspree form ID from https://formspree.io/forms -->
-          <form id="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" enctype="multipart/form-data">
+          <form id="contact-form" action="https://formspree.io/f/mzzknpwj" method="POST" enctype="multipart/form-data" novalidate>
             <label>
               <span class="sr">Jméno</span>
-              <input name="name" type="text" placeholder="Jméno / firma" required>
+              <input name="name" type="text" placeholder="Jméno / firma" required minlength="2" maxlength="100">
             </label>
             <label>
               <span class="sr">E-mail</span>
-              <input name="_replyto" type="email" placeholder="E-mail" required>
+              <input name="_replyto" type="email" placeholder="E-mail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
             </label>
             <label>
               <span class="sr">Telefon</span>
-              <input name="phone" type="tel" placeholder="Telefon (volitelné)">
+              <input name="phone" type="tel" placeholder="Telefon (volitelné)" pattern="[\d\s\+\-\(\)]{9,20}">
             </label>
             <label>
               <span class="sr">Odkaz na úložiště</span>
-              <input name="storage_link" type="url" placeholder="Odkaz na OneDrive / Google Drive (pokud máte více souborů)">
+              <input name="storage_link" type="url" placeholder="Odkaz na OneDrive / Google Drive (pokud máte více souborů)" pattern="https?://.+">
             </label>
             <label>
               <span class="sr">Zpráva</span>
-              <textarea name="message" rows="4" placeholder="Stručně rozsah: most/ŽD/monolit, edice ÚRS, termín…"></textarea>
+              <textarea name="message" rows="4" placeholder="Stručně rozsah: most/ŽD/monolit, edice ÚRS, termín…" maxlength="2000"></textarea>
             </label>
             <label>
               <span class="sr">Soubory</span>
-              <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx">
+              <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx" data-max-size="10485760">
             </label>
             <small class="muted">Maximální velikost souboru 10&nbsp;MB. Pro větší objem využijte prosím odkaz na úložiště.</small>
+
+            <!-- Honeypot field for spam protection -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
             <div class="inline">
               <button class="btn" type="submit">Odeslat</button>
               <span id="form-status" class="muted" role="status" aria-live="polite"></span>
             </div>
             <input type="hidden" name="subject" value="Poptávka – Rozpočty KROS4 (ÚRS/OTSKP)">
+            <input type="hidden" name="_next" value="https://alpro1000.github.io/?submitted=true">
             <p class="muted" style="font-size:14px">Odesláním formuláře potvrzujete, že jste si přečetli informace o zpracování osobních údajů a souhlasíte se zpracováním údajů pro účely vyřízení poptávky.</p>
           </form>
         </div>
@@ -385,88 +389,179 @@
     // Update footer year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Enhanced form handling with better UX
+    // Utility: Throttle function for performance optimization
+    function throttle(func, delay) {
+      let lastCall = 0;
+      return function(...args) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+          lastCall = now;
+          return func.apply(this, args);
+        }
+      };
+    }
+
+    // Enhanced form handling with robust error handling and validation
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('form-status');
 
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
+    if (form && statusEl) {
+      // Client-side file size validation
+      const fileInput = form.querySelector('input[type="file"]');
+      if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+          const maxSize = parseInt(this.getAttribute('data-max-size') || '10485760', 10); // 10MB default
+          const files = Array.from(this.files || []);
+          const oversizedFiles = files.filter(f => f.size > maxSize);
 
-      // Disable button and show loading state
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Odesílám...';
-      submitBtn.style.opacity = '0.6';
-      statusEl.textContent = 'Odesílám zprávu…';
-      statusEl.style.color = 'var(--brand-2)';
-
-      const data = new FormData(form);
-
-      try{
-        const r = await fetch(form.action, {
-          method:'POST',
-          body:data,
-          headers: { 'Accept':'application/json' }
+          if (oversizedFiles.length > 0) {
+            const fileNames = oversizedFiles.map(f => f.name).join(', ');
+            statusEl.textContent = `✗ Soubor(y) jsou příliš velké: ${fileNames}. Max 10 MB.`;
+            statusEl.style.color = 'var(--err)';
+            this.value = ''; // Clear invalid files
+          } else {
+            statusEl.textContent = '';
+          }
         });
+      }
 
-        if(r.ok){
-          statusEl.textContent = '✓ Děkuji! Ozvu se co nejdříve.';
-          statusEl.style.color = 'var(--ok)';
-          form.reset();
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-          // Celebrate success
-          submitBtn.textContent = '✓ Odesláno';
-          setTimeout(()=>{
+        // Robust validation
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) return;
+
+        const originalText = submitBtn.textContent;
+
+        // Check honeypot (spam protection)
+        const honeypot = form.querySelector('input[name="_gotcha"]');
+        if (honeypot && honeypot.value) {
+          console.warn('Spam detected via honeypot');
+          return false;
+        }
+
+        // Validate required fields
+        const nameInput = form.querySelector('input[name="name"]');
+        const emailInput = form.querySelector('input[name="_replyto"]');
+
+        if (!nameInput || !nameInput.value.trim() || nameInput.value.trim().length < 2) {
+          statusEl.textContent = '✗ Vyplňte prosím jméno (min. 2 znaky).';
+          statusEl.style.color = 'var(--err)';
+          nameInput?.focus();
+          return;
+        }
+
+        if (!emailInput || !emailInput.value.trim() || !emailInput.checkValidity()) {
+          statusEl.textContent = '✗ Zadejte prosím platnou e-mailovou adresu.';
+          statusEl.style.color = 'var(--err)';
+          emailInput?.focus();
+          return;
+        }
+
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Odesílám...';
+        submitBtn.style.opacity = '0.6';
+        statusEl.textContent = 'Odesílám zprávu…';
+        statusEl.style.color = 'var(--brand-2)';
+
+        const data = new FormData(form);
+
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
+          const r = await fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' },
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+
+          if (r.ok) {
+            statusEl.textContent = '✓ Děkuji! Ozvu se co nejdříve.';
+            statusEl.style.color = 'var(--ok)';
+            form.reset();
+
+            // Celebrate success
+            submitBtn.textContent = '✓ Odesláno';
+            setTimeout(() => {
+              submitBtn.textContent = originalText;
+              submitBtn.disabled = false;
+              submitBtn.style.opacity = '1';
+              statusEl.textContent = '';
+            }, 5000);
+          } else {
+            // Handle specific HTTP errors
+            let errorMsg = '✗ Nepodařilo se odeslat.';
+            if (r.status === 400) errorMsg += ' Zkontrolujte prosím formulář.';
+            else if (r.status === 429) errorMsg += ' Příliš mnoho pokusů. Počkejte chvíli.';
+            else if (r.status >= 500) errorMsg += ' Problém na straně serveru.';
+            errorMsg += ' Případně napište na e-mail.';
+
+            statusEl.textContent = errorMsg;
+            statusEl.style.color = 'var(--err)';
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
-          }, 3000);
-        }else{
-          statusEl.textContent = '✗ Nepodařilo se odeslat. Napište prosím na e-mail.';
+          }
+        } catch (err) {
+          let errorMsg = '✗ ';
+          if (err.name === 'AbortError') {
+            errorMsg += 'Vypršel časový limit. Zkuste to prosím znovu.';
+          } else if (!navigator.onLine) {
+            errorMsg += 'Žádné připojení k internetu. Zkontrolujte síť.';
+          } else {
+            errorMsg += 'Chyba připojení. Zkuste to prosím znovu nebo napište na e-mail.';
+          }
+
+          statusEl.textContent = errorMsg;
           statusEl.style.color = 'var(--err)';
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
           submitBtn.style.opacity = '1';
-        }
-      }catch(err){
-        statusEl.textContent = '✗ Chyba připojení. Zkuste to prosím znovu.';
-        statusEl.style.color = 'var(--err)';
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-      }
-    });
 
-    // Scroll-triggered animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
-          observer.unobserve(entry.target);
+          console.error('Form submission error:', err);
         }
       });
-    }, observerOptions);
+    }
 
-    // Observe all cards and sections
-    document.querySelectorAll('.card, .section').forEach(el => {
-      el.style.opacity = '0';
-      observer.observe(el);
-    });
+    // Scroll-triggered animations with IntersectionObserver
+    if ('IntersectionObserver' in window) {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
 
-    // Add parallax effect to hero panel
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      // Observe all cards and sections
+      document.querySelectorAll('.card, .section').forEach(el => {
+        el.style.opacity = '0';
+        observer.observe(el);
+      });
+    }
+
+    // Add optimized parallax effect to hero panel
     const heroPanel = document.querySelector('.hero .panel');
     if (heroPanel) {
-      window.addEventListener('scroll', () => {
+      const handleScroll = throttle(() => {
         const scrolled = window.pageYOffset;
         const rate = scrolled * 0.3;
         heroPanel.style.transform = `translateY(${rate}px)`;
-      });
+      }, 16); // ~60fps
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
     }
 
     // Enhanced badge interaction
@@ -491,9 +586,9 @@
 
     // Smooth scroll with offset for fixed header
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function(e) {
         const href = this.getAttribute('href');
-        if (href !== '#' && href !== '#kontakt' && href !== '#nahrat') {
+        if (href && href !== '#' && href !== '#kontakt' && href !== '#nahrat') {
           e.preventDefault();
           const target = document.querySelector(href);
           if (target) {
@@ -509,6 +604,15 @@
         }
       });
     });
+
+    // Check for submission success via URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('submitted') === 'true' && statusEl) {
+      statusEl.textContent = '✓ Formulář byl úspěšně odeslán!';
+      statusEl.style.color = 'var(--ok)';
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   </script>
 </body>
 </html>
