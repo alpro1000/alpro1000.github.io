@@ -7,7 +7,7 @@
   <meta name="description" content="Zpracovávám stavební rozpočty v programu KROS4 podle cenových soustav ÚRS a OTSKP Ministerstva dopravy. Rodinné domy, pozemní i dopravní stavby. Přesně, přehledně, férově.">
   <meta name="author" content="M Service Plus s.r.o.">
   <meta name="keywords" content="rozpočty staveb, rozpočtář KROS4, stavební rozpočet ÚRS, OTSKP rozpočet, položkový rozpočet, výkaz výměr, rozpočtář Praha, rodinné domy">
-  <link rel="canonical" href="https://alpro1000.github.io/">
+  <link rel="canonical" href="https://msplus.cz/">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rozpočty staveb v KROS4 – ÚRS, OTSKP | M Service Plus s.r.o.">
   <meta property="og:description" content="Profesní rozpočtář KROS4. ÚRS a OTSKP Ministerstva dopravy – rodinné domy, pozemní, dopravní i inženýrské stavby. Přesně, přehledně, férově.">
-  <meta property="og:url" content="https://alpro1000.github.io/">
+  <meta property="og:url" content="https://msplus.cz/">
   <meta property="og:site_name" content="MServiceRozpočty">
   <meta property="og:image" content="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'&gt;&lt;rect width='100%' height='100%' fill='%230f1410'/&gt;&lt;text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='72' fill='%23e8efe6'&gt;MServiceRozpocty&lt;/text&gt;&lt;/svg&gt;">
   <meta property="og:image:alt" content="MServiceRozpočty – Rozpočty staveb v KROS4">
@@ -192,8 +192,8 @@
     "@type":"Organization",
     "name":"M Service Plus s.r.o.",
     "alternateName":"MServiceRozpočty",
-    "url":"https://alpro1000.github.io/",
-    "logo":"https://alpro1000.github.io/favicon.svg",
+    "url":"https://msplus.cz/",
+    "logo":"https://msplus.cz/favicon.svg",
     "email":"alpro1000@gmail.com",
     "telephone":"+420777896741",
     "vatID":"CZ06285368",
@@ -215,7 +215,7 @@
     "provider":{
       "@type":"Organization",
       "name":"M Service Plus s.r.o.",
-      "url":"https://alpro1000.github.io/"
+      "url":"https://msplus.cz/"
     },
     "areaServed":"CZ",
     "description":"Rozpočty pro rodinné domy, pozemní, dopravní a inženýrské stavby v programu KROS4 s cenovými soustavami ÚRS a OTSKP.",
@@ -419,8 +419,9 @@
               <button class="btn" type="submit">Odeslat</button>
               <span id="form-status" class="muted" role="status" aria-live="polite"></span>
             </div>
+            <input type="hidden" name="request_id" id="request-id" value="">
             <input type="hidden" name="subject" value="Poptávka – Rozpočty KROS4 (ÚRS/OTSKP)">
-            <input type="hidden" name="_next" value="https://alpro1000.github.io/?submitted=true">
+            <input type="hidden" name="_next" value="https://msplus.cz/?submitted=true">
           </form>
         </div>
       </div>
@@ -559,6 +560,29 @@
           return;
         }
 
+        // Generate unique request ID: YYYYMMDD-HHMMSS-RAND
+        const now = new Date();
+        const dateStr = now.getFullYear() +
+                        String(now.getMonth() + 1).padStart(2, '0') +
+                        String(now.getDate()).padStart(2, '0');
+        const timeStr = String(now.getHours()).padStart(2, '0') +
+                        String(now.getMinutes()).padStart(2, '0') +
+                        String(now.getSeconds()).padStart(2, '0');
+        const randomStr = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+        const requestId = `${dateStr}-${timeStr}-${randomStr}`;
+
+        // Set request ID in hidden field
+        const requestIdField = form.querySelector('#request-id');
+        if (requestIdField) {
+          requestIdField.value = requestId;
+        }
+
+        // Update subject to include request ID
+        const subjectField = form.querySelector('input[name="subject"]');
+        if (subjectField) {
+          subjectField.value = `Poptávka č. ${requestId} – Rozpočty KROS4 (ÚRS/OTSKP)`;
+        }
+
         // Disable button and show loading state
         submitBtn.disabled = true;
         submitBtn.textContent = 'Odesílám...';
@@ -582,7 +606,7 @@
           clearTimeout(timeoutId);
 
           if (r.ok) {
-            statusEl.textContent = '✓ Děkuji! Ozvu se co nejdříve.';
+            statusEl.textContent = `✓ Děkuji! Vaše poptávka č. ${requestId} byla odeslána. Ozvu se co nejdříve na váš e-mail.`;
             statusEl.style.color = 'var(--ok)';
             form.reset();
 
@@ -593,7 +617,7 @@
               submitBtn.disabled = false;
               submitBtn.style.opacity = '1';
               statusEl.textContent = '';
-            }, 5000);
+            }, 8000); // Extended to 8s so user can read the ID
           } else {
             // Handle errors without exposing technical details
             let errorMsg = '✗ Nepodařilo se odeslat zprávu.';
