@@ -296,7 +296,7 @@
             </label>
             <label>
               <span class="sr">E-mail</span>
-              <input name="_replyto" type="email" placeholder="E-mail" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+              <input name="_replyto" type="email" placeholder="E-mail" required pattern="^[a-zA-Z0-9]([a-zA-Z0-9._-]{0,62}[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$" title="Zadejte platnou e-mailovou adresu">
             </label>
             <label>
               <span class="sr">Telefon</span>
@@ -314,10 +314,13 @@
               <span class="sr">Soubory</span>
               <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx" data-max-size="10485760">
             </label>
-            <small class="muted">Maximální velikost souboru 10&nbsp;MB. Pro větší objem využijte prosím odkaz na úložiště.</small>
+            <small class="muted">Maximální velikost souboru 10&nbsp;MB (celkem max 25&nbsp;MB). Pro větší objem využijte prosím odkaz na úložiště.</small>
+            <!-- Note: Client-side validation is for UX only. Formspree.io handles server-side validation. -->
 
-            <!-- Honeypot field for spam protection -->
-            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+            <!-- Anti-spam field (do not remove) -->
+            <label class="sr" aria-hidden="true">
+              <input type="text" name="_gotcha" value="" tabindex="-1" autocomplete="new-password">
+            </label>
 
             <div class="inline">
               <button class="btn" type="submit">Odeslat</button>
@@ -406,17 +409,35 @@
     const statusEl = document.getElementById('form-status');
 
     if (form && statusEl) {
+      // Utility: Sanitize text to prevent XSS
+      const sanitizeText = (text) => {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      };
+
       // Client-side file size validation
       const fileInput = form.querySelector('input[type="file"]');
       if (fileInput) {
         fileInput.addEventListener('change', function(e) {
-          const maxSize = parseInt(this.getAttribute('data-max-size') || '10485760', 10); // 10MB default
+          const maxSize = parseInt(this.getAttribute('data-max-size') || '10485760', 10); // 10MB per file
+          const totalMaxSize = 25 * 1024 * 1024; // 25MB total limit
           const files = Array.from(this.files || []);
+
+          // Check individual file sizes
           const oversizedFiles = files.filter(f => f.size > maxSize);
 
+          // Calculate total size
+          const totalSize = files.reduce((total, file) => total + file.size, 0);
+
           if (oversizedFiles.length > 0) {
-            const fileNames = oversizedFiles.map(f => f.name).join(', ');
-            statusEl.textContent = `✗ Soubor(y) jsou příliš velké: ${fileNames}. Max 10 MB.`;
+            const fileNames = oversizedFiles.map(f => sanitizeText(f.name)).join(', ');
+            statusEl.textContent = `✗ Soubor(y) jsou příliš velké: ${fileNames}. Max 10 MB na soubor.`;
+            statusEl.style.color = 'var(--err)';
+            this.value = ''; // Clear invalid files
+          } else if (totalSize > totalMaxSize) {
+            const totalSizeMB = (totalSize / 1024 / 1024).toFixed(1);
+            statusEl.textContent = `✗ Celková velikost souborů (${totalSizeMB} MB) překračuje limit 25 MB.`;
             statusEl.style.color = 'var(--err)';
             this.value = ''; // Clear invalid files
           } else {
@@ -434,11 +455,19 @@
 
         const originalText = submitBtn.textContent;
 
-        // Check honeypot (spam protection)
+        // Check honeypot (spam protection) - silently reject if filled
         const honeypot = form.querySelector('input[name="_gotcha"]');
         if (honeypot && honeypot.value) {
-          console.warn('Spam detected via honeypot');
-          return false;
+          // Pretend success to fool bots, but don't actually submit
+          statusEl.textContent = '✓ Děkuji! Ozvu se co nejdříve.';
+          statusEl.style.color = 'var(--ok)';
+          form.reset();
+          submitBtn.textContent = '✓ Odesláno';
+          setTimeout(() => {
+            submitBtn.textContent = originalText;
+            statusEl.textContent = '';
+          }, 5000);
+          return; // Stop here without submitting
         }
 
         // Validate required fields
@@ -607,9 +636,15 @@
 
     // Check for submission success via URL parameter
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('submitted') === 'true' && statusEl) {
+    if (urlParams.get('submitted') === 'true' && statusEl && form) {
       statusEl.textContent = '✓ Formulář byl úspěšně odeslán!';
       statusEl.style.color = 'var(--ok)';
+
+      // Scroll to the form to make the message visible
+      setTimeout(() => {
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
