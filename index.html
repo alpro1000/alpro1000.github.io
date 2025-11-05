@@ -163,6 +163,7 @@
         <a href="#krosinfo">KROS4</a>
         <a href="#cenik">Ceník</a>
         <a href="#kontakt">Kontakt</a>
+        <a href="obchodni-podminky.html">VOP</a>
         <a href="gdpr.html">GDPR</a>
       </nav>
     </div>
@@ -326,13 +327,20 @@
               <input type="text" name="_gotcha" value="" tabindex="-1" autocomplete="new-password">
             </label>
 
+            <!-- Consent checkbox (required) -->
+            <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:12px 0">
+              <input type="checkbox" name="consent" id="consent" required style="width:auto;margin-top:4px;cursor:pointer;accent-color:var(--brand)">
+              <span style="font-size:14px;line-height:1.5">
+                Souhlasím se zpracováním osobních údajů dle <a href="gdpr.html" target="_blank" style="color:var(--brand-2);text-decoration:underline">informací o GDPR</a> a s <a href="obchodni-podminky.html" target="_blank" style="color:var(--brand-2);text-decoration:underline">obchodními podmínkami</a>. *
+              </span>
+            </label>
+
             <div class="inline">
               <button class="btn" type="submit">Odeslat</button>
               <span id="form-status" class="muted" role="status" aria-live="polite"></span>
             </div>
             <input type="hidden" name="subject" value="Poptávka – Rozpočty KROS4 (ÚRS/OTSKP)">
             <input type="hidden" name="_next" value="https://alpro1000.github.io/?submitted=true">
-            <p class="muted" style="font-size:14px">Odesláním formuláře potvrzujete, že jste si přečetli informace o zpracování osobních údajů a souhlasíte se zpracováním údajů pro účely vyřízení poptávky.</p>
           </form>
         </div>
       </div>
@@ -385,6 +393,10 @@
   <footer>
     <div class="wrap" style="display:grid;gap:14px">
       <div>© <span id="y"></span> M Service Plus s.r.o. · MServiceRozpočty · Rozpočty staveb v KROS4 – ÚRS · OTSKP</div>
+      <div style="font-size:13px">
+        <a href="obchodni-podminky.html" style="color:var(--muted);text-decoration:underline">Obchodní podmínky</a> ·
+        <a href="gdpr.html" style="color:var(--muted);text-decoration:underline">GDPR</a>
+      </div>
       <p class="muted" style="font-size:13px;line-height:1.5">
         KROS® je registrovaná ochranná známka společnosti ÚRS, a.s.<br>
         Tento web není oficiálním zastoupením programu KROS4, pouze s ním pracuje při tvorbě rozpočtů.
@@ -438,6 +450,15 @@
             statusEl.textContent = '';
           }, 5000);
           return; // Stop here without submitting
+        }
+
+        // Validate consent checkbox
+        const consentCheckbox = form.querySelector('input[name="consent"]');
+        if (!consentCheckbox || !consentCheckbox.checked) {
+          statusEl.textContent = '✗ Musíte souhlasit se zpracováním osobních údajů a obchodními podmínkami.';
+          statusEl.style.color = 'var(--err)';
+          consentCheckbox?.focus();
+          return;
         }
 
         // Validate required fields
