@@ -94,11 +94,6 @@
     form{display:grid;gap:12px}
     input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f1511;color:var(--ink);transition:all .3s ease;font-family:inherit}
     input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(107,142,35,.2);background:#141a15}
-    input[type="file"]{padding:0;border:0;background:transparent}
-    input[type="file"]::file-selector-button{border:0;background:var(--brand);color:#0b0f0b;padding:10px 16px;border-radius:10px;margin-right:10px;cursor:pointer;transition:all .3s ease;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px}
-    input[type="file"]::file-selector-button:hover{background:var(--brand-2);transform:scale(1.05)}
-    .file-label{display:inline-block;padding:10px 16px;background:var(--brand);color:#0b0f0b;border-radius:10px;cursor:pointer;font-weight:600;transition:all .3s ease;margin-bottom:8px}
-    .file-label:hover{background:var(--brand-2);transform:scale(1.05)}
     footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px}
     .pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:all .3s ease}
     .pill:hover{border-color:var(--brand);color:var(--brand-2);transform:scale(1.02)}
@@ -183,7 +178,6 @@
           <p class="lead">M Service Plus s.r.o. · rozpočtář s praxí z realizovaných staveb · plátce DPH · férová komunikace.</p>
           <div class="hero-cta">
             <a class="btn" href="#kontakt" aria-label="Odeslat poptávku">Poptat rozpočet</a>
-            <a class="btn ghost" href="#nahrat" aria-label="Nahrát podklady">Nahrát podklady</a>
           </div>
         </div>
       </div>
@@ -298,7 +292,7 @@
     <section id="nahrat" class="section">
       <div class="wrap grid">
         <div class="card">
-          <h2>Poptávka / nahrání podkladů</h2>
+          <h2>Poptávka</h2>
           <form id="contact-form" action="https://formspree.io/f/mzzknpwj" method="POST" enctype="multipart/form-data" novalidate>
             <label>
               <span class="sr">Jméno</span>
@@ -306,7 +300,7 @@
             </label>
             <label>
               <span class="sr">E-mail</span>
-              <input name="_replyto" type="email" placeholder="E-mail" required pattern="^[a-zA-Z0-9]([a-zA-Z0-9._-]{0,62}[a-zA-Z0-9])?@[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$" title="Zadejte platnou e-mailovou adresu">
+              <input name="_replyto" type="email" placeholder="E-mail" required title="Zadejte platnou e-mailovou adresu">
             </label>
             <label>
               <span class="sr">Telefon</span>
@@ -318,14 +312,9 @@
             </label>
             <label>
               <span class="sr">Zpráva</span>
-              <textarea name="message" rows="4" placeholder="Stručně rozsah: most/ŽD/monolit, edice ÚRS, termín…" maxlength="2000"></textarea>
+              <textarea name="message" rows="4" placeholder="Stručně rozsah: rodinný dům/přístavba, edice ÚRS, termín…" maxlength="2000"></textarea>
             </label>
-            <label>
-              <span class="sr">Soubory</span>
-              <input name="file" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx" data-max-size="10485760">
-            </label>
-            <small class="muted">Maximální velikost souboru 10&nbsp;MB (celkem max 25&nbsp;MB). Pro větší objem využijte prosím odkaz na úložiště.</small>
-            <!-- Note: Client-side validation is for UX only. Formspree.io handles server-side validation. -->
+            <small class="muted">Pro podklady (PDF/XLSX/ZIP) prosím použijte odkaz na úložiště výše, nebo pošlete na e-mail po potvrzení.</small>
 
             <!-- Anti-spam field (do not remove) -->
             <label class="sr" aria-hidden="true">
@@ -419,67 +408,8 @@
     const statusEl = document.getElementById('form-status');
 
     if (form && statusEl) {
-      // Utility: Sanitize text to prevent XSS
-      const sanitizeText = (text) => {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      };
-
-      // Client-side file size validation
-      const fileInput = form.querySelector('input[type="file"]');
-      if (fileInput) {
-        // Set Czech text for file button (browser default is in system language)
-        // We'll use a custom approach with data attribute
-        const fileLabel = document.createElement('span');
-        fileLabel.textContent = 'Žádný soubor nevybrán';
-        fileLabel.style.marginLeft = '10px';
-        fileLabel.style.color = 'var(--muted)';
-        fileLabel.style.fontSize = '14px';
-        fileInput.insertAdjacentElement('afterend', fileLabel);
-
-        fileInput.addEventListener('change', function(e) {
-          const maxSize = parseInt(this.getAttribute('data-max-size') || '10485760', 10); // 10MB per file
-          const totalMaxSize = 25 * 1024 * 1024; // 25MB total limit
-          const files = Array.from(this.files || []);
-
-          // Update file label
-          if (files.length === 0) {
-            fileLabel.textContent = 'Žádný soubor nevybrán';
-            fileLabel.style.color = 'var(--muted)';
-          } else if (files.length === 1) {
-            fileLabel.textContent = `${files[0].name}`;
-            fileLabel.style.color = 'var(--ink)';
-          } else {
-            fileLabel.textContent = `${files.length} souborů vybráno`;
-            fileLabel.style.color = 'var(--ink)';
-          }
-
-          // Check individual file sizes
-          const oversizedFiles = files.filter(f => f.size > maxSize);
-
-          // Calculate total size
-          const totalSize = files.reduce((total, file) => total + file.size, 0);
-
-          if (oversizedFiles.length > 0) {
-            const fileNames = oversizedFiles.map(f => sanitizeText(f.name)).join(', ');
-            statusEl.textContent = `✗ Soubor(y) jsou příliš velké: ${fileNames}. Max 10 MB na soubor.`;
-            statusEl.style.color = 'var(--err)';
-            this.value = ''; // Clear invalid files
-            fileLabel.textContent = 'Žádný soubor nevybrán';
-            fileLabel.style.color = 'var(--muted)';
-          } else if (totalSize > totalMaxSize) {
-            const totalSizeMB = (totalSize / 1024 / 1024).toFixed(1);
-            statusEl.textContent = `✗ Celková velikost souborů (${totalSizeMB} MB) překračuje limit 25 MB.`;
-            statusEl.style.color = 'var(--err)';
-            this.value = ''; // Clear invalid files
-            fileLabel.textContent = 'Žádný soubor nevybrán';
-            fileLabel.style.color = 'var(--muted)';
-          } else {
-            statusEl.textContent = '';
-          }
-        });
-      }
+      // No file upload - Formspree free plan doesn't support it
+      // Users can use storage link or email files after contact
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -559,30 +489,16 @@
               statusEl.textContent = '';
             }, 5000);
           } else {
-            // Get error details from response
-            let errorDetails = '';
-            try {
-              const errorData = await r.json();
-              console.error('Formspree error:', errorData);
-              if (errorData.errors && errorData.errors.length > 0) {
-                errorDetails = ` (${errorData.errors[0]})`;
-              }
-            } catch (e) {
-              console.error('Error parsing response:', e);
-            }
-
-            // Handle specific HTTP errors
-            let errorMsg = '✗ Nepodařilo se odeslat.';
+            // Handle errors without exposing technical details
+            let errorMsg = '✗ Nepodařilo se odeslat zprávu.';
             if (r.status === 400) {
-              errorMsg += ' Zkontrolujte e-mail a další pole.' + errorDetails;
-            } else if (r.status === 403) {
-              errorMsg += ' Formspree ID může být neplatný.';
+              errorMsg = '✗ Zkontrolujte prosím e-mailovou adresu a další pole.';
             } else if (r.status === 429) {
-              errorMsg += ' Příliš mnoho pokusů. Počkejte chvíli.';
+              errorMsg = '✗ Příliš mnoho pokusů. Počkejte prosím chvíli.';
             } else if (r.status >= 500) {
-              errorMsg += ' Problém na straně serveru.';
+              errorMsg = '✗ Služba dočasně nedostupná. Zkuste to prosím později.';
             }
-            errorMsg += ' Napište na: alpro1000@gmail.com';
+            errorMsg += ' Případně napište přímo na: alpro1000@gmail.com';
 
             statusEl.textContent = errorMsg;
             statusEl.style.color = 'var(--err)';
@@ -591,22 +507,22 @@
             submitBtn.style.opacity = '1';
           }
         } catch (err) {
-          let errorMsg = '✗ ';
+          // Handle network errors without exposing technical details
+          let errorMsg = '✗ Nepodařilo se odeslat zprávu. ';
           if (err.name === 'AbortError') {
             errorMsg += 'Vypršel časový limit. Zkuste to prosím znovu.';
           } else if (!navigator.onLine) {
-            errorMsg += 'Žádné připojení k internetu. Zkontrolujte síť.';
+            errorMsg += 'Zkontrolujte prosím připojení k internetu.';
           } else {
-            errorMsg += 'Chyba připojení. Zkuste to prosím znovu nebo napište na e-mail.';
+            errorMsg += 'Zkuste to prosím později.';
           }
+          errorMsg += ' Případně napište přímo na: alpro1000@gmail.com';
 
           statusEl.textContent = errorMsg;
           statusEl.style.color = 'var(--err)';
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
           submitBtn.style.opacity = '1';
-
-          console.error('Form submission error:', err);
         }
       });
     }
