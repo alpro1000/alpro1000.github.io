@@ -94,8 +94,11 @@
     form{display:grid;gap:12px}
     input,textarea,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f1511;color:var(--ink);transition:all .3s ease;font-family:inherit}
     input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(107,142,35,.2);background:#141a15}
-    input::file-selector-button{border:0;background:var(--brand);color:#0b0f0b;padding:8px 12px;border-radius:10px;margin-right:10px;cursor:pointer;transition:all .3s ease}
-    input::file-selector-button:hover{background:var(--brand-2);transform:scale(1.05)}
+    input[type="file"]{padding:0;border:0;background:transparent}
+    input[type="file"]::file-selector-button{border:0;background:var(--brand);color:#0b0f0b;padding:10px 16px;border-radius:10px;margin-right:10px;cursor:pointer;transition:all .3s ease;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px}
+    input[type="file"]::file-selector-button:hover{background:var(--brand-2);transform:scale(1.05)}
+    .file-label{display:inline-block;padding:10px 16px;background:var(--brand);color:#0b0f0b;border-radius:10px;cursor:pointer;font-weight:600;transition:all .3s ease;margin-bottom:8px}
+    .file-label:hover{background:var(--brand-2);transform:scale(1.05)}
     footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px}
     .pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:all .3s ease}
     .pill:hover{border-color:var(--brand);color:var(--brand-2);transform:scale(1.02)}
@@ -153,13 +156,13 @@
 <body>
   <header>
     <div class="wrap bar">
-      <div class="logo">
+      <a href="/" class="logo" aria-label="Zpět na hlavní stránku">
         <div class="logo-badge" aria-hidden="true">MSR</div>
         <div>
           <div style="font-weight:800;letter-spacing:.5px">MServiceRozpočty</div>
           <div class="muted" style="font-size:12px">Rozpočty staveb v KROS4 · ÚRS · OTSKP</div>
         </div>
-      </div>
+      </a>
       <nav aria-label="Hlavní navigace">
         <a href="#sluzby">Služby</a>
         <a href="#krosinfo">KROS4</a>
@@ -181,7 +184,6 @@
           <div class="hero-cta">
             <a class="btn" href="#kontakt" aria-label="Odeslat poptávku">Poptat rozpočet</a>
             <a class="btn ghost" href="#nahrat" aria-label="Nahrát podklady">Nahrát podklady</a>
-            <span class="pill">Rozpočty pro hypotéku i investora</span>
           </div>
         </div>
       </div>
@@ -248,7 +250,12 @@
             <span class="badge">ÚRS</span>
             <span class="badge">OTSKP</span>
             <span class="badge">Výkaz výměr</span>
-            <span class="badge">Rozpočtář Praha</span>
+            <span class="badge">Praha</span>
+            <span class="badge">Brno</span>
+            <span class="badge">Ostrava</span>
+            <span class="badge">Plzeň</span>
+            <span class="badge">Liberec</span>
+            <span class="badge">Olomouc</span>
           </div>
         </div>
       </div>
@@ -315,7 +322,7 @@
             </label>
             <label>
               <span class="sr">Soubory</span>
-              <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx" data-max-size="10485760">
+              <input name="file" type="file" multiple accept=".pdf,.xls,.xlsx,.csv,.zip,.doc,.docx" data-max-size="10485760">
             </label>
             <small class="muted">Maximální velikost souboru 10&nbsp;MB (celkem max 25&nbsp;MB). Pro větší objem využijte prosím odkaz na úložiště.</small>
             <!-- Note: Client-side validation is for UX only. Formspree.io handles server-side validation. -->
@@ -422,10 +429,31 @@
       // Client-side file size validation
       const fileInput = form.querySelector('input[type="file"]');
       if (fileInput) {
+        // Set Czech text for file button (browser default is in system language)
+        // We'll use a custom approach with data attribute
+        const fileLabel = document.createElement('span');
+        fileLabel.textContent = 'Žádný soubor nevybrán';
+        fileLabel.style.marginLeft = '10px';
+        fileLabel.style.color = 'var(--muted)';
+        fileLabel.style.fontSize = '14px';
+        fileInput.insertAdjacentElement('afterend', fileLabel);
+
         fileInput.addEventListener('change', function(e) {
           const maxSize = parseInt(this.getAttribute('data-max-size') || '10485760', 10); // 10MB per file
           const totalMaxSize = 25 * 1024 * 1024; // 25MB total limit
           const files = Array.from(this.files || []);
+
+          // Update file label
+          if (files.length === 0) {
+            fileLabel.textContent = 'Žádný soubor nevybrán';
+            fileLabel.style.color = 'var(--muted)';
+          } else if (files.length === 1) {
+            fileLabel.textContent = `${files[0].name}`;
+            fileLabel.style.color = 'var(--ink)';
+          } else {
+            fileLabel.textContent = `${files.length} souborů vybráno`;
+            fileLabel.style.color = 'var(--ink)';
+          }
 
           // Check individual file sizes
           const oversizedFiles = files.filter(f => f.size > maxSize);
@@ -438,11 +466,15 @@
             statusEl.textContent = `✗ Soubor(y) jsou příliš velké: ${fileNames}. Max 10 MB na soubor.`;
             statusEl.style.color = 'var(--err)';
             this.value = ''; // Clear invalid files
+            fileLabel.textContent = 'Žádný soubor nevybrán';
+            fileLabel.style.color = 'var(--muted)';
           } else if (totalSize > totalMaxSize) {
             const totalSizeMB = (totalSize / 1024 / 1024).toFixed(1);
             statusEl.textContent = `✗ Celková velikost souborů (${totalSizeMB} MB) překračuje limit 25 MB.`;
             statusEl.style.color = 'var(--err)';
             this.value = ''; // Clear invalid files
+            fileLabel.textContent = 'Žádný soubor nevybrán';
+            fileLabel.style.color = 'var(--muted)';
           } else {
             statusEl.textContent = '';
           }
@@ -527,12 +559,30 @@
               statusEl.textContent = '';
             }, 5000);
           } else {
+            // Get error details from response
+            let errorDetails = '';
+            try {
+              const errorData = await r.json();
+              console.error('Formspree error:', errorData);
+              if (errorData.errors && errorData.errors.length > 0) {
+                errorDetails = ` (${errorData.errors[0]})`;
+              }
+            } catch (e) {
+              console.error('Error parsing response:', e);
+            }
+
             // Handle specific HTTP errors
             let errorMsg = '✗ Nepodařilo se odeslat.';
-            if (r.status === 400) errorMsg += ' Zkontrolujte prosím formulář.';
-            else if (r.status === 429) errorMsg += ' Příliš mnoho pokusů. Počkejte chvíli.';
-            else if (r.status >= 500) errorMsg += ' Problém na straně serveru.';
-            errorMsg += ' Případně napište na e-mail.';
+            if (r.status === 400) {
+              errorMsg += ' Zkontrolujte e-mail a další pole.' + errorDetails;
+            } else if (r.status === 403) {
+              errorMsg += ' Formspree ID může být neplatný.';
+            } else if (r.status === 429) {
+              errorMsg += ' Příliš mnoho pokusů. Počkejte chvíli.';
+            } else if (r.status >= 500) {
+              errorMsg += ' Problém na straně serveru.';
+            }
+            errorMsg += ' Napište na: alpro1000@gmail.com';
 
             statusEl.textContent = errorMsg;
             statusEl.style.color = 'var(--err)';
