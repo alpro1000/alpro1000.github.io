@@ -103,8 +103,88 @@
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+
+    /* Responsive pricing table - card layout on mobile */
+    @media (max-width:900px){
+      .table thead{display:none}
+      .table,.table tbody,.table tr,.table td{display:block}
+      .table tr{margin-bottom:16px;padding:16px;border-radius:12px}
+      .table td{padding:8px 0;border:none;text-align:left}
+      .table td:first-child{font-weight:700;font-size:1.1em;color:var(--brand-2);margin-bottom:8px}
+      .table td:last-child{font-size:1.2em;margin-top:12px}
+      .table td.muted{font-size:0.9em;line-height:1.5}
+    }
+
+    /* Tablet and below - responsive adjustments */
+    @media (max-width:1024px){
+      .wrap{padding:0 14px}
+      .hero{padding:32px 0 20px}
+      .hero .panel{padding:24px}
+      .card{padding:16px}
+      .section{padding:20px 0}
+      .grid.cols-3{grid-template-columns:1fr}
+      .fab{padding:12px 16px;font-size:14px}
+    }
+
+    /* Mobile - header and navigation */
+    @media (max-width:768px){
+      .bar{flex-wrap:wrap;padding:10px 0;gap:10px}
+      .logo{flex-shrink:0;min-width:0}
+      .logo>div{overflow:hidden}
+      .logo>div>div:first-child{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .logo>div>div:last-child{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .logo-badge{width:36px;height:36px;font-size:13px;flex-shrink:0}
+
+      nav{width:100%;flex-wrap:wrap;gap:8px;justify-content:center}
+      nav a{padding:8px 10px;font-size:13px;flex:1 1 auto;text-align:center;min-width:fit-content}
+
+      h1{font-size:24px}
+      .lead{font-size:15px}
+      h2{font-size:20px}
+      h3{font-size:17px}
+
+      .hero{padding:24px 0 16px}
+      .hero .panel{padding:20px}
+      .section{padding:16px 0}
+      .card{padding:14px}
+
+      .inline{gap:8px}
+      .badge{font-size:11px;padding:2px 6px}
+
+      input,textarea,select{padding:10px 12px;font-size:14px}
+      .btn{padding:10px 14px;font-size:14px}
+
+      .fab{right:12px;bottom:12px;padding:10px 14px;font-size:13px}
+
+      footer{font-size:12px;padding:20px 0}
+    }
+
+    /* Small mobile - compact layout */
+    @media (max-width:480px){
+      .wrap{padding:0 12px}
+      .logo>div>div:first-child{font-size:15px}
+      .logo>div>div:last-child{display:none}
+      .logo-badge{width:32px;height:32px;font-size:12px}
+
+      nav a{padding:7px 8px;font-size:12px}
+
+      h1{font-size:22px}
+      .lead{font-size:14px}
+      h2{font-size:18px}
+      h3{font-size:16px}
+
+      .hero .panel{padding:16px}
+      .card{padding:12px}
+
+      .table tr{padding:12px}
+      .table td:first-child{font-size:1em}
+
+      .badge{font-size:10px;padding:2px 5px}
+
+      .fab{font-size:12px;padding:8px 12px}
+    }
+
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-    @media (max-width:840px){.grid.cols-3{grid-template-columns:1fr}}
   </style>
   <script type="application/ld+json">
   {
@@ -265,27 +345,27 @@
             <tbody>
               <tr>
                 <td>Zpracování 1 položky včetně výměr</td>
-                <td class="muted">Výměr z výkresů · vyhledání v katalogu ÚRS/OTSKP · zadání do KROS4</td>
-                <td class="price">100&nbsp;Kč / ks</td>
+                <td class="muted">Výměr z výkresů, katalog, zadání</td>
+                <td class="price">100&nbsp;Kč/ks</td>
               </tr>
               <tr>
-                <td>Rozklad T-O-V (1 položka)</td>
-                <td class="muted">Orientační práce/stroje/materiál</td>
-                <td class="price">290&nbsp;Kč / ks</td>
+                <td>Rozklad T-O-V</td>
+                <td class="muted">Práce, stroje, materiál</td>
+                <td class="price">290&nbsp;Kč/ks</td>
               </tr>
               <tr>
-                <td>Rychlá kontrola rozpočtu</td>
-                <td class="muted">Do 50 položek · report chyb/duplicit · doporučení úprav</td>
+                <td>Rychlá kontrola</td>
+                <td class="muted">Do 50 položek, chyby, duplicity</td>
                 <td class="price">1&nbsp;900&nbsp;Kč</td>
               </tr>
               <tr>
                 <td>Hodinová sazba</td>
-                <td class="muted">Konzultace, úpravy, kontrola</td>
-                <td class="price">450&nbsp;Kč / h</td>
+                <td class="muted">Konzultace, úpravy</td>
+                <td class="price">450&nbsp;Kč/h</td>
               </tr>
               <tr>
                 <td>Kompletní rozpočet</td>
-                <td class="muted">Rodinné domy, pozemní stavby – dle podkladů a rozsahu</td>
+                <td class="muted">Dle podkladů a rozsahu</td>
                 <td class="price">dle domluvy</td>
               </tr>
             </tbody>
