@@ -1,8 +1,10 @@
 # robots.txt for msplus.cz
-# Stavební rozpočty KROS4 - ÚRS, OTSKP
+# Stavební rozpočty KROS 4 - ÚRS, OTSKP
 
 User-agent: *
 Allow: /
+Disallow: /lunar-landing/
+Disallow: /*dreambook*
 
 # Sitemap
 Sitemap: https://msplus.cz/sitemap.xml
@@ -14,7 +16,9 @@ Crawl-delay: 1
 # Google
 User-agent: Googlebot
 Allow: /
+Disallow: /lunar-landing/
 
 # Bing
 User-agent: Bingbot
 Allow: /
+Disallow: /lunar-landing/
