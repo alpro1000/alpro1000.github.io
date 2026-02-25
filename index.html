@@ -29,6 +29,8 @@
   <meta name="twitter:title" content="Rozpočty staveb KROS 4 | ÚRS, OTSKP">
   <meta name="twitter:description" content="Stavební rozpočty v KROS 4 – ÚRS, OTSKP. Rodinné domy, pozemní stavby. Online pro celou ČR.">
   <meta name="twitter:image" content="https://msplus.cz/og-image.png">
+  <!-- Cloudflare Turnstile anti-spam -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     :root{
       --bg:#0f1410; --card:#141a15; --ink:#e8efe6; --muted:#aeb8a8;
@@ -510,6 +512,10 @@
               <input type="text" name="_gotcha" value="" tabindex="-1" autocomplete="new-password">
             </label>
 
+            <!-- Cloudflare Turnstile CAPTCHA -->
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark" data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError"></div>
+            <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response" value="">
+
             <!-- Consent checkbox (required) -->
             <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;padding:12px 0">
               <input type="checkbox" name="consent" id="consent" required style="width:auto;margin-top:4px;cursor:pointer;accent-color:var(--brand)">
@@ -593,6 +599,22 @@
     // Update footer year
     document.getElementById('y').textContent = new Date().getFullYear();
 
+    // Cloudflare Turnstile callbacks
+    let turnstileToken = '';
+    function onTurnstileSuccess(token) {
+      turnstileToken = token;
+      const hiddenInput = document.getElementById('cf-turnstile-response');
+      if (hiddenInput) hiddenInput.value = token;
+    }
+    function onTurnstileError() {
+      turnstileToken = '';
+      const statusEl = document.getElementById('form-status');
+      if (statusEl) {
+        statusEl.textContent = '✗ Ověření selhalo. Obnovte stránku a zkuste znovu.';
+        statusEl.style.color = 'var(--err)';
+      }
+    }
+
     // Utility: Throttle function for performance optimization
     function throttle(func, delay) {
       let lastCall = 0;
@@ -635,6 +657,13 @@
             statusEl.textContent = '';
           }, 5000);
           return; // Stop here without submitting
+        }
+
+        // Validate Turnstile CAPTCHA
+        if (!turnstileToken) {
+          statusEl.textContent = '✗ Dokončete prosím ověření CAPTCHA.';
+          statusEl.style.color = 'var(--err)';
+          return;
         }
 
         // Validate consent checkbox
