@@ -190,7 +190,11 @@
       .fab{font-size:12px;padding:8px 12px}
     }
 
-    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important;transition:none!important}
+      /* Animace jsou vypnuté, takže odhalovací animace neproběhne – obsah musí zůstat viditelný. */
+      .card,.section{opacity:1!important}
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -761,8 +765,11 @@
       });
     }
 
-    // Scroll-triggered animations with IntersectionObserver
-    if ('IntersectionObserver' in window) {
+    // Scroll-triggered animations with IntersectionObserver.
+    // Při zapnutém "omezit pohyb" se nic neskrývá – obsah se vykreslí rovnou.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion) {
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'

@@ -53,6 +53,7 @@
     .muted{color:var(--muted)}
     .price{font-weight:800;color:var(--ok);font-size:1.2em}
     footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px;font-size:14px}
+    .sr{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     @media (max-width:768px){
       .bar{padding:10px 0}
       .logo-badge{width:36px;height:36px;font-size:13px}
@@ -198,6 +199,23 @@
         if (!consentCheckbox || !consentCheckbox.checked) {
           statusEl.textContent = '✗ Musíte souhlasit se zpracováním osobních údajů.';
           statusEl.style.color = 'var(--err)';
+          return;
+        }
+
+        const nameInput = form.querySelector('input[name="name"]');
+        const emailInput = form.querySelector('input[name="_replyto"]');
+
+        if (!nameInput || !nameInput.value.trim() || nameInput.value.trim().length < 2) {
+          statusEl.textContent = '✗ Vyplňte prosím jméno (min. 2 znaky).';
+          statusEl.style.color = 'var(--err)';
+          nameInput?.focus();
+          return;
+        }
+
+        if (!emailInput || !emailInput.value.trim() || !emailInput.checkValidity()) {
+          statusEl.textContent = '✗ Zadejte prosím platnou e-mailovou adresu.';
+          statusEl.style.color = 'var(--err)';
+          emailInput?.focus();
           return;
         }
 

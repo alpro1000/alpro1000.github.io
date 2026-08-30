@@ -255,6 +255,23 @@
           return;
         }
 
+        const nameInput = form.querySelector('input[name="name"]');
+        const emailInput = form.querySelector('input[name="_replyto"]');
+
+        if (!nameInput || !nameInput.value.trim() || nameInput.value.trim().length < 2) {
+          statusEl.textContent = '✗ Vyplňte prosím jméno (min. 2 znaky).';
+          statusEl.style.color = 'var(--err)';
+          nameInput?.focus();
+          return;
+        }
+
+        if (!emailInput || !emailInput.value.trim() || !emailInput.checkValidity()) {
+          statusEl.textContent = '✗ Zadejte prosím platnou e-mailovou adresu.';
+          statusEl.style.color = 'var(--err)';
+          emailInput?.focus();
+          return;
+        }
+
         const now = new Date();
         const dateStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
         const timeStr = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0') + String(now.getSeconds()).padStart(2, '0');
