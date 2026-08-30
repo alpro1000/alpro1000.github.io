@@ -25,7 +25,7 @@
   <text x="600" y="290" font-family="Arial, sans-serif" font-size="56" font-weight="700" fill="#e8efe6" text-anchor="middle">MServiceRozpočty</text>
 
   <!-- Subtitle -->
-  <text x="600" y="350" font-family="Arial, sans-serif" font-size="32" fill="#aeb8a8" text-anchor="middle">Rozpočty staveb v KROS4</text>
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="32" fill="#aeb8a8" text-anchor="middle">Rozpočty staveb v KROS 4</text>
 
   <!-- Keywords -->
   <text x="600" y="410" font-family="Arial, sans-serif" font-size="28" fill="#9acd32" text-anchor="middle">ÚRS • OTSKP • Online pro celou ČR</text>

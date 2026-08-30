@@ -6,15 +6,191 @@
   <title>FAQ - Časté otázky | Rozpočty staveb KROS 4</title>
   <meta name="description" content="Odpovědi na časté otázky o rozpočtech staveb, cenách, termínech, ÚRS, OTSKP, KROS 4. Vše o položkových rozpočtech pro hypotéky a stavby.">
   <link rel="canonical" href="https://msplus.cz/faq">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Časté otázky o rozpočtech staveb | MServiceRozpočty">
+  <meta property="og:description" content="Odpovědi na časté otázky o rozpočtech staveb, cenách, termínech, ÚRS, OTSKP a KROS 4.">
+  <meta property="og:url" content="https://msplus.cz/faq">
+  <meta property="og:site_name" content="MServiceRozpočty">
+  <meta property="og:image" content="https://msplus.cz/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MServiceRozpočty – rozpočty staveb v KROS 4">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://msplus.cz/og-image.png">
   <link rel="icon" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <style>:root{--bg:#0f1410;--card:#141a15;--ink:#e8efe6;--muted:#aeb8a8;--brand:#6b8e23;--brand-2:#9acd32;--line:#1d2a21;--radius:22px}*{box-sizing:border-box;margin:0;padding:0}html,body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:0 16px}header{position:sticky;top:0;background:rgba(15,20,16,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:50}.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;flex-wrap:wrap}.logo{display:flex;align-items:center;gap:10px}.logo-badge{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800}nav{display:flex;gap:14px;flex-wrap:wrap}nav a{padding:10px 12px;border-radius:12px;color:var(--muted)}nav a:hover{color:var(--ink);background:var(--line)}.hero{padding:56px 0 28px}.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px}h1{font-size:clamp(28px,4vw,42px);margin-bottom:16px}h2{font-size:clamp(20px,3vw,24px);margin:24px 0 12px;color:var(--brand-2)}h3{font-size:18px;margin:16px 0 8px}.faq-item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:16px 0}.muted{color:var(--muted)}footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px;font-size:14px}</style>
+  <style>:root{--bg:#0f1410;--card:#141a15;--ink:#e8efe6;--muted:#aeb8a8;--brand:#6b8e23;--brand-2:#9acd32;--line:#1d2a21;--radius:22px}*{box-sizing:border-box;margin:0;padding:0}html,body{background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',monospace;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:0 16px}header{position:sticky;top:0;background:rgba(15,20,16,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:50}.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;flex-wrap:wrap}.logo{display:flex;align-items:center;gap:10px}.logo-badge{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800}nav{display:flex;gap:14px;flex-wrap:wrap}nav a{padding:10px 12px;border-radius:12px;color:var(--muted)}nav a:hover{color:var(--ink);background:var(--line)}.hero{padding:56px 0 28px}.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px}h1{font-size:clamp(28px,4vw,42px);margin-bottom:16px}h2{font-size:clamp(20px,3vw,24px);margin:24px 0 12px;color:var(--brand-2)}h3{font-size:18px;margin:16px 0 8px}.faq-item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:16px 0}.muted{color:var(--muted)}footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px;font-size:14px}    nav a[aria-current="page"]{color:var(--brand-2)}
+    /* --- kompaktní menu na mobilu, aby lepivá hlavička nezabrala půl obrazovky --- */
+    @media (max-width:768px){
+      header .bar{padding:8px 0}
+      nav{width:100%;gap:4px;justify-content:flex-start}
+      nav a{padding:6px 8px;font-size:12px;border-radius:9px}
+    }
+    @media (max-width:420px){
+      nav a{padding:5px 6px;font-size:11px}
+    }
+    /* --- sjednocené odkazy v patičce (mapa webu) --- */
+    .footlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 24px;margin:0 0 18px;text-align:left}
+    .footlinks .fh{display:block;color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+    .footlinks a{display:block;padding:4px 0;color:var(--muted);font-size:14px;text-decoration:none;border:0}
+    .footlinks a:hover{color:var(--brand-2)}
+    .footlinks a[aria-current="page"]{color:var(--brand-2);font-weight:700}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Úvod",
+        "item": "https://msplus.cz/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Časté otázky",
+        "item": "https://msplus.cz/faq"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Co je položkový rozpočet stavby?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Položkový rozpočet je detailní výpis všech prací, materiálů a výkonů potřebných pro realizaci stavby. Každá položka obsahuje popis, jednotku (m², m³, kg...), množství a jednotkovou cenu. Součástí je výkaz výměr - výpočet množství z projektové dokumentace."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jaký je rozdíl mezi ÚRS a OTSKP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ÚRS (Ústav pro racionalizaci ve stavebnictví) – cenová soustava pro pozemní a inženýrské stavby, obsahuje databázové jednotkové ceny."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Co je program KROS 4?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "KROS 4 je profesionální software pro oceňování a řízení stavební výroby od společnosti ÚRS. Umožňuje tvorbu rozpočtů podle ÚRS i OTSKP, rozklad T-O-V, časové plánování a mnoho dalších funkcí."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Kolik stojí rozpočet rodinného domu?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cena závisí na počtu položek. Typický RD 150 m² má 200-400 položek = 20 000 - 40 000 Kč bez DPH. Zpracování 1 položky včetně výměr = 100 Kč bez DPH. Po zaslání podkladů zašlu přesnou cenovou nabídku."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Platí se záloha?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "U zakázek nad 20 000 Kč bez DPH požaduji zálohu 50 %. Zbytek po dodání rozpočtu. U menších zakázek platba až po dokončení."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vystavujete fakturu s DPH?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ano, jsme plátci DPH. Všechny ceny na webu jsou uvedeny bez DPH, k ceně se připočítá 21 % DPH."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jak dlouho trvá zpracování rozpočtu?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Typický termín je 3-7 pracovních dnů od dodání všech podkladů. Express zpracování možné po dohodě. Termín závisí na rozsahu projektu a aktuálním vytížení."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jaké podklady potřebujete?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ideálně: Projektová dokumentace (výkresy stavební části) + výkaz výměr (pokud existuje). Minimálně: Výkresy půdorysů, řezů, pohledů. Pokud máte tech. zprávu nebo specifikaci materiálů, tím lépe."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jak probíhá spolupráce?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "1) Pošlete poptávku s podklady 2) Zašlu cenovou nabídku a termín 3) Po odsouhlasení zpracuji rozpočet 4) Doručím výstupy v XLSX/PDF 5) Případné úpravy zdarma do 7 dnů"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Potřebuji rozpočet pro hypotéku. Vyhovuje to bankám?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ano! Rozpočty podle ÚRS v KROS 4 akceptují všechny banky v ČR (Česká spořitelna, ČSOB, Komerční banka, Moneta, UniCredit atd.). Rozpočet obsahuje vše, co banky vyžadují - položkový výpis, výkaz výměr, rekapitulaci."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Mohu použít rozpočet i pro čerpání hypotéky po etapách?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ano, rozpočet lze strukturovat podle etap stavby (hrubá stavba, dokončovací práce, instalace...). Na vyžádání mohu přidat časový harmonogram."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Co je rozklad T-O-V?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "T-O-V = Práce (Труд) - Stroje (Оборудование) - Materiál (Výrobky). Detailní rozklad každé rozpočtové položky na tyto tři složky. Zejména důležité pro OTSKP, použitelné i pro ÚRS. Slouží pro kontrolu cen a kalkulaci subdodavatelů."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "V jakém formátu dostanu rozpočet?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "XLSX (Excel) - pro další úpravy a výpočty PDF - pro tisk a archivaci"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Můžete zpracovat rozpočet i pro starší projekt?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ano, dokážu zpracovat i starší projekty. Používám aktuální edici ÚRS, pokud potřebujete starší edici z důvodu porovnání, je to možné po domluvě."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header>
     <div class="wrap bar">
       <a href="/" class="logo"><div class="logo-badge">MSR</div><div><div style="font-weight:800">MServiceRozpočty</div></div></a>
-      <nav><a href="/">Úvod</a><a href="/#sluzby">Služby</a><a href="/#cenik">Ceník</a><a href="/#kontakt">Kontakt</a></nav>
+      <nav aria-label="Hlavní navigace">
+        <a href="/">Úvod</a>
+        <a href="/rodinne-domy">Rodinné domy</a>
+        <a href="/pozemni-stavby">Pozemní stavby</a>
+        <a href="/elektrika">Elektroinstalace</a>
+        <a href="/hypoteky">Hypotéky</a>
+        <a href="/#cenik">Ceník</a>
+        <a href="/#kontakt">Kontakt</a>
+      </nav>
     </div>
   </header>
 
@@ -134,7 +310,30 @@
   </main>
 
   <footer>
-    <div class="wrap"><p>© <span id="y"></span> M Service Plus s.r.o. · <a href="/">MServiceRozpočty</a></p><p><a href="obchodni-podminky.html" style="text-decoration:underline">VOP</a> · <a href="gdpr.html" style="text-decoration:underline">GDPR</a></p></div>
+    <div class="wrap">
+      <nav class="footlinks" aria-label="Mapa webu">
+        <div>
+          <span class="fh">Rozpočty</span>
+          <a href="/rodinne-domy">Rodinné domy</a>
+          <a href="/pozemni-stavby">Pozemní stavby</a>
+          <a href="/elektrika">Elektroinstalace</a>
+          <a href="/hypoteky">Rozpočet pro hypotéku</a>
+        </div>
+        <div>
+          <span class="fh">Informace</span>
+          <a href="/#cenik">Ceník</a>
+          <a href="/faq" aria-current="page">Časté otázky</a>
+          <a href="/about">O společnosti</a>
+          <a href="/#kontakt">Kontakt</a>
+        </div>
+        <div>
+          <span class="fh">Dokumenty</span>
+          <a href="/obchodni-podminky.html">Obchodní podmínky</a>
+          <a href="/gdpr.html">GDPR</a>
+        </div>
+      </nav>
+      <p>© <span id="y"></span> M Service Plus s.r.o. · <a href="/">MServiceRozpočty</a></p>
+    </div>
   </footer>
 
   <script>document.getElementById('y').textContent=new Date().getFullYear();</script>

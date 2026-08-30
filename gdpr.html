@@ -6,6 +6,18 @@
   <title>GDPR | MServiceRozpočty – M Service Plus s.r.o.</title>
   <meta name="description" content="Informace o zpracování osobních údajů – M Service Plus s.r.o., rozpočty staveb v KROS 4.">
   <link rel="canonical" href="https://msplus.cz/gdpr.html">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="GDPR | MServiceRozpočty">
+  <meta property="og:description" content="Informace o zpracování osobních údajů – M Service Plus s.r.o.">
+  <meta property="og:url" content="https://msplus.cz/gdpr.html">
+  <meta property="og:site_name" content="MServiceRozpočty">
+  <meta property="og:image" content="https://msplus.cz/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MServiceRozpočty – rozpočty staveb v KROS 4">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://msplus.cz/og-image.png">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,6 +82,22 @@
     }
 
     @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+      nav a[aria-current="page"]{color:var(--brand-2)}
+    /* --- kompaktní menu na mobilu, aby lepivá hlavička nezabrala půl obrazovky --- */
+    @media (max-width:768px){
+      header .bar{padding:8px 0}
+      nav{width:100%;gap:4px;justify-content:flex-start}
+      nav a{padding:6px 8px;font-size:12px;border-radius:9px}
+    }
+    @media (max-width:420px){
+      nav a{padding:5px 6px;font-size:11px}
+    }
+    /* --- sjednocené odkazy v patičce (mapa webu) --- */
+    .footlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 24px;margin:0 0 18px;text-align:left}
+    .footlinks .fh{display:block;color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+    .footlinks a{display:block;padding:4px 0;color:var(--muted);font-size:14px;text-decoration:none;border:0}
+    .footlinks a:hover{color:var(--brand-2)}
+    .footlinks a[aria-current="page"]{color:var(--brand-2);font-weight:700}
   </style>
 </head>
 <body>
@@ -115,6 +143,29 @@
   </main>
 
   <footer>
+    <div class="wrap" style="padding:0 18px">
+      <nav class="footlinks" aria-label="Mapa webu">
+        <div>
+          <span class="fh">Rozpočty</span>
+          <a href="/rodinne-domy">Rodinné domy</a>
+          <a href="/pozemni-stavby">Pozemní stavby</a>
+          <a href="/elektrika">Elektroinstalace</a>
+          <a href="/hypoteky">Rozpočet pro hypotéku</a>
+        </div>
+        <div>
+          <span class="fh">Informace</span>
+          <a href="/#cenik">Ceník</a>
+          <a href="/faq">Časté otázky</a>
+          <a href="/about">O společnosti</a>
+          <a href="/#kontakt">Kontakt</a>
+        </div>
+        <div>
+          <span class="fh">Dokumenty</span>
+          <a href="/obchodni-podminky.html">Obchodní podmínky</a>
+          <a href="/gdpr.html" aria-current="page">GDPR</a>
+        </div>
+      </nav>
+    </div>
     <div>© <span id="y"></span> M Service Plus s.r.o. · MServiceRozpočty</div>
   </footer>
 

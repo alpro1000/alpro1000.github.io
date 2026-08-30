@@ -49,7 +49,7 @@
     .logo:hover{transform:translateX(2px)}
     .logo-badge{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800;letter-spacing:.5px;transition:all .3s ease;box-shadow:0 4px 12px rgba(107,142,35,.3)}
     .logo-badge:hover{transform:rotate(5deg) scale(1.05);box-shadow:var(--glow)}
-    nav{display:flex;gap:14px}
+    nav{display:flex;gap:14px;flex-wrap:wrap}
     nav a{padding:10px 12px;border-radius:12px;color:var(--muted);transition:all .3s cubic-bezier(.4,0,.2,1);position:relative}
     nav a::before{content:'';position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--brand-2);transition:all .3s ease;transform:translateX(-50%)}
     nav a:hover{color:var(--ink);background:var(--line);transform:translateY(-1px)}
@@ -190,7 +190,27 @@
       .fab{font-size:12px;padding:8px 12px}
     }
 
-    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important;transition:none!important}
+      /* Animace jsou vypnuté, takže odhalovací animace neproběhne – obsah musí zůstat viditelný. */
+      .card,.section{opacity:1!important}
+    }
+      nav a[aria-current="page"]{color:var(--brand-2)}
+    /* --- kompaktní menu na mobilu, aby lepivá hlavička nezabrala půl obrazovky --- */
+    @media (max-width:768px){
+      header .bar{padding:8px 0}
+      nav{width:100%;gap:4px;justify-content:flex-start}
+      nav a{padding:6px 8px;font-size:12px;border-radius:9px}
+    }
+    @media (max-width:420px){
+      nav a{padding:5px 6px;font-size:11px}
+    }
+    /* --- sjednocené odkazy v patičce (mapa webu) --- */
+    .footlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 24px;margin:0 0 18px;text-align:left}
+    .footlinks .fh{display:block;color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+    .footlinks a{display:block;padding:4px 0;color:var(--muted);font-size:14px;text-decoration:none;border:0}
+    .footlinks a:hover{color:var(--brand-2)}
+    .footlinks a[aria-current="page"]{color:var(--brand-2);font-weight:700}
   </style>
   <script type="application/ld+json">
   {
@@ -326,12 +346,12 @@
       </a>
       <nav aria-label="Hlavní navigace">
         <a href="#sluzby">Služby</a>
-        <a href="#krosinfo">KROS 4</a>
+        <a href="/rodinne-domy">Rodinné domy</a>
+        <a href="/pozemni-stavby">Pozemní stavby</a>
+        <a href="/elektrika">Elektroinstalace</a>
+        <a href="/hypoteky">Hypotéky</a>
         <a href="#cenik">Ceník</a>
-        <a href="#nahrat">Poptávka</a>
         <a href="#kontakt">Kontakt</a>
-        <a href="obchodni-podminky.html">VOP</a>
-        <a href="gdpr.html">GDPR</a>
       </nav>
     </div>
   </header>
@@ -577,11 +597,28 @@
 
   <footer>
     <div class="wrap" style="display:grid;gap:14px">
+      <nav class="footlinks" aria-label="Mapa webu">
+        <div>
+          <span class="fh">Rozpočty</span>
+          <a href="/rodinne-domy">Rodinné domy</a>
+          <a href="/pozemni-stavby">Pozemní stavby</a>
+          <a href="/elektrika">Elektroinstalace</a>
+          <a href="/hypoteky">Rozpočet pro hypotéku</a>
+        </div>
+        <div>
+          <span class="fh">Informace</span>
+          <a href="/#cenik">Ceník</a>
+          <a href="/faq">Časté otázky</a>
+          <a href="/about">O společnosti</a>
+          <a href="/#kontakt">Kontakt</a>
+        </div>
+        <div>
+          <span class="fh">Dokumenty</span>
+          <a href="/obchodni-podminky.html">Obchodní podmínky</a>
+          <a href="/gdpr.html">GDPR</a>
+        </div>
+      </nav>
       <div>© <span id="y"></span> M Service Plus s.r.o. · MServiceRozpočty · Rozpočty staveb v KROS 4 – ÚRS · OTSKP</div>
-      <div style="font-size:13px">
-        <a href="obchodni-podminky.html" style="color:var(--muted);text-decoration:underline">Obchodní podmínky</a> ·
-        <a href="gdpr.html" style="color:var(--muted);text-decoration:underline">GDPR</a>
-      </div>
       <p class="muted" style="font-size:13px;line-height:1.5">
         KROS® je registrovaná ochranná známka společnosti ÚRS, a.s.<br>
         Tento web není oficiálním zastoupením programu KROS 4, pouze s ním pracuje při tvorbě rozpočtů.
@@ -761,8 +798,11 @@
       });
     }
 
-    // Scroll-triggered animations with IntersectionObserver
-    if ('IntersectionObserver' in window) {
+    // Scroll-triggered animations with IntersectionObserver.
+    // Při zapnutém "omezit pohyb" se nic neskrývá – obsah se vykreslí rovnou.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if ('IntersectionObserver' in window && !prefersReducedMotion) {
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
