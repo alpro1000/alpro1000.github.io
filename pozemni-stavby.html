@@ -6,13 +6,61 @@
   <title>Rozpočty pro pozemní stavby | KROS 4, ÚRS, OTSKP</title>
   <meta name="description" content="Rozpočty pro pozemní stavby, průmyslové objekty, administrativní budovy v KROS 4. ÚRS, OTSKP. ➤ Poptat rozpočet nyní!">
   <link rel="canonical" href="https://msplus.cz/pozemni-stavby">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rozpočty pro pozemní stavby | KROS 4">
+  <meta property="og:description" content="Rozpočty pro pozemní stavby, průmyslové objekty a administrativní budovy v KROS 4. ÚRS, OTSKP.">
+  <meta property="og:url" content="https://msplus.cz/pozemni-stavby">
+  <meta property="og:site_name" content="MServiceRozpočty">
+  <meta property="og:image" content="https://msplus.cz/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MServiceRozpočty – rozpočty staveb v KROS 4">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://msplus.cz/og-image.png">
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0f1410;--card:#141a15;--ink:#e8efe6;--muted:#aeb8a8;--brand:#6b8e23;--brand-2:#9acd32;--line:#1d2a21;--ok:#9acd32;--err:#ff6b6b;--radius:22px;--shadow:0 8px 24px rgba(0,0,0,.35)}*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'JetBrains Mono',ui-monospace,Menlo,Monaco,Consolas,monospace;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:0 16px}header{position:sticky;top:0;background:rgba(15,20,16,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);z-index:50}.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;flex-wrap:wrap}.logo{display:flex;align-items:center;gap:10px}.logo-badge{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0f0a;font-weight:800}nav{display:flex;gap:14px;flex-wrap:wrap}nav a{padding:10px 12px;border-radius:12px;color:var(--muted)}nav a:hover{color:var(--ink);background:var(--line)}.btn{padding:12px 18px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0b0f0b;font-weight:700;border:0;cursor:pointer}.hero{padding:56px 0 28px}.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:32px}h1{font-size:clamp(28px,4vw,42px);margin:0 0 8px}h2{font-size:clamp(22px,3.5vw,30px);margin:24px 0 16px}.lead{color:var(--muted);font-size:clamp(16px,2.5vw,19px);line-height:1.6;margin:8px 0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:20px 0}.list{list-style:none;padding:0}.list li{padding-left:18px;position:relative;margin:8px 0}.list li::before{content:'→';position:absolute;left:0;color:var(--brand)}form{display:grid;gap:12px}input,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0f1511;color:var(--ink);font-family:inherit}input:focus,textarea:focus{outline:none;border-color:var(--brand)}.muted{color:var(--muted)}.price{color:var(--ok);font-weight:800;font-size:1.2em}footer{padding:26px 0;color:var(--muted);border-top:1px solid var(--line);margin-top:32px;font-size:14px}
+      nav a[aria-current="page"]{color:var(--brand-2)}
+    /* --- kompaktní menu na mobilu, aby lepivá hlavička nezabrala půl obrazovky --- */
+    @media (max-width:768px){
+      header .bar{padding:8px 0}
+      nav{width:100%;gap:4px;justify-content:flex-start}
+      nav a{padding:6px 8px;font-size:12px;border-radius:9px}
+    }
+    @media (max-width:420px){
+      nav a{padding:5px 6px;font-size:11px}
+    }
+    /* --- sjednocené odkazy v patičce (mapa webu) --- */
+    .footlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 24px;margin:0 0 18px;text-align:left}
+    .footlinks .fh{display:block;color:var(--ink);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+    .footlinks a{display:block;padding:4px 0;color:var(--muted);font-size:14px;text-decoration:none;border:0}
+    .footlinks a:hover{color:var(--brand-2)}
+    .footlinks a[aria-current="page"]{color:var(--brand-2);font-weight:700}
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Úvod",
+        "item": "https://msplus.cz/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Rozpočty pozemních staveb",
+        "item": "https://msplus.cz/pozemni-stavby"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header>
@@ -21,7 +69,15 @@
         <div class="logo-badge">MSR</div>
         <div><div style="font-weight:800">MServiceRozpočty</div><div class="muted" style="font-size:12px">KROS 4 · ÚRS · OTSKP</div></div>
       </a>
-      <nav><a href="/">Úvod</a><a href="/#sluzby">Služby</a><a href="/#cenik">Ceník</a><a href="/#kontakt">Kontakt</a></nav>
+      <nav aria-label="Hlavní navigace">
+        <a href="/">Úvod</a>
+        <a href="/rodinne-domy">Rodinné domy</a>
+        <a href="/pozemni-stavby" aria-current="page">Pozemní stavby</a>
+        <a href="/elektrika">Elektroinstalace</a>
+        <a href="/hypoteky">Hypotéky</a>
+        <a href="/#cenik">Ceník</a>
+        <a href="/#kontakt">Kontakt</a>
+      </nav>
     </div>
   </header>
 
@@ -88,8 +144,28 @@
 
   <footer>
     <div class="wrap">
+      <nav class="footlinks" aria-label="Mapa webu">
+        <div>
+          <span class="fh">Rozpočty</span>
+          <a href="/rodinne-domy">Rodinné domy</a>
+          <a href="/pozemni-stavby" aria-current="page">Pozemní stavby</a>
+          <a href="/elektrika">Elektroinstalace</a>
+          <a href="/hypoteky">Rozpočet pro hypotéku</a>
+        </div>
+        <div>
+          <span class="fh">Informace</span>
+          <a href="/#cenik">Ceník</a>
+          <a href="/faq">Časté otázky</a>
+          <a href="/about">O společnosti</a>
+          <a href="/#kontakt">Kontakt</a>
+        </div>
+        <div>
+          <span class="fh">Dokumenty</span>
+          <a href="/obchodni-podminky.html">Obchodní podmínky</a>
+          <a href="/gdpr.html">GDPR</a>
+        </div>
+      </nav>
       <p>© <span id="y"></span> M Service Plus s.r.o. · <a href="/">MServiceRozpočty</a></p>
-      <p><a href="obchodni-podminky.html" style="text-decoration:underline">VOP</a> · <a href="gdpr.html" style="text-decoration:underline">GDPR</a></p>
     </div>
   </footer>
 
